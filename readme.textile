@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.1_
+version: _v0.1.1_
 
 Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 
@@ -51,3 +51,4 @@ Translation ready
 h4. Changelog
 
 * _v0.1_ first version
+* _v0.1.1_ should now work with post titles & post slugs/names
