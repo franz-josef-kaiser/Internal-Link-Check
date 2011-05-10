@@ -1,0 +1,51 @@
+h2. Internal Link Checker
+
+version: _v0.1_
+
+Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
+
+----------------------------------------------------------------
+
+h3. Example
+
+No examples needed - works out of the box.
+
+h3. How-to
+
+This shows how to modify the output inside the internal link checker meta box:
+
+<pre>function modify_check_link_meta_box_content( $result, $links )
+{
+	global $post;
+	// Uncomment the follwing line to see what the $links array contains
+	// The links array contains all posts (and their respective data) that link to the current post
+	/*
+	echo '<pre>';
+		print_r( $links );
+	echo '</pre>';
+	 */
+
+	// Now handle the result:
+	foreach ( $result as $link )
+	{
+		// do stuff
+	}
+
+	return $result;
+}
+add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10, 2 );</pre>
+
+
+h3. Stylesheets
+
+Not needed.
+
+h3. Languages
+
+Translation ready
+
+----------------------------------------------------------------
+
+h4. Changelog
+
+* _v0.1_ first version
