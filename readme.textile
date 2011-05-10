@@ -21,9 +21,9 @@ function modify_check_link_meta_box_content( $result, $links )
 	// Uncomment the follwing line to see what the $links array contains
 	// The links array contains all posts (and their respective data) that link to the current post
 	/*
-	echo '<pre>';
+	echo '<'.'pre>';
 		print_r( $links );
-	echo '</pre>';
+	echo '<'.'/pre>';
 	 */
 
 	// Now handle the result:
