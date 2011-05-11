@@ -79,11 +79,15 @@ if ( ! defined ( 'LINKCHECKER_TEXTDOMAIN' ) )
 
 		// Filter the result or add anything
 		$result = apply_filters( 'internal_links_meta_box', $result, $links );
-
+		
 		if ( $result )
-		foreach ( $result as $link )
 		{
-			echo $link;
+			echo '<ul>';
+				foreach ( $result as $link )
+				{
+					echo '<li>'.$link.'</li>';
+				}
+			echo '</ul>';
 		}
 	}
 	add_action( 'add_meta_boxes', 'check_post_links_meta_box' );
