@@ -15,7 +15,7 @@ h3. How-to
 This shows how to modify the output inside the internal link checker meta box:
 
 <pre>
-function modify_check_link_meta_box_content( $result, $links )
+function modify_checklink_metabox_content( $result, $links )
 {
 	global $post;
 	// Uncomment the follwing line to see what the $links array contains
@@ -34,7 +34,7 @@ function modify_check_link_meta_box_content( $result, $links )
 
 	return $result;
 }
-add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10, 2 );
+add_filter( 'internal_links_meta_box', 'modify_checklink_metabox_content', 10, 2 );
 </pre>
 
 

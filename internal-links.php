@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser
 Author URI: 	https://github.com/franz-josef-kaiser
-Version:		0.1.1
+Version:		0.1.2.
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 	(c) Copyright 2012 - 201X by AUTHOR
@@ -69,12 +69,13 @@ if ( ! defined ( 'LINKCHECKER_TEXTDOMAIN' ) )
 		if ( $links )
 		{
 			foreach( $links as $link )
+			{
 				$result[] = '<a href="'.get_permalink( $post->ID ).'">'.$link->post_title.'</a>';
+			}
 		}
 		else 
 		{
-			__( 'No posts are linking to this post.', LINKCHECKER_TEXTDOMAIN );
-			return;
+			return _e( 'No posts are linking to this post.', LINKCHECKER_TEXTDOMAIN );
 		}
 
 		// Filter the result or add anything
@@ -82,13 +83,15 @@ if ( ! defined ( 'LINKCHECKER_TEXTDOMAIN' ) )
 		
 		if ( $result )
 		{
-			echo '<ul>';
+			$output = '<ul>';
 				foreach ( $result as $link )
 				{
-					echo '<li>'.$link.'</li>';
+					$output .= '<li>'.$link.'</li>';
 				}
-			echo '</ul>';
+			$output .= '</ul>';
 		}
+
+		return print $output;
 	}
 	add_action( 'add_meta_boxes', 'check_post_links_meta_box' );
 ?>
