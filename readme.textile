@@ -1,10 +1,10 @@
 h2. Internal Link Checker
 
-version: _v0.1.3._
+version: _v0.2_
 
-**New** Now also available via the wordpress.org plugin repository for easier updates.
+**Updates** available via the wp.org plugin repository.
 
-Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
+Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box - **just activate**!
 
 ----------------------------------------------------------------
 
@@ -46,13 +46,15 @@ Not needed.
 
 h3. Languages
 
-Translation ready
+Translation ready - So far the translation files don't exist. If you want to help, please contact me.
 
 ----------------------------------------------------------------
 
 h4. Changelog
 
-* _v0.1._ first version
-* _v0.1.1._ should now work with post titles & post slugs/names
-* _v0.1.2._ meta box content now displays inside an unordered list
-* _v0.1.2._ added screenshot, readme.txt for wp.org repo & fixed not echoing that there are no links
+* _v0.1._ First version
+* _v0.1.1._ Should now work with post titles & post slugs/names
+* _v0.1.2._ Meta box content now displays inside an unordered list
+* _v0.1.2._ Added screenshot, readme.txt for wp.org repo & fixed not echoing that there are no links
+* _v0.1.3._ Minor fixes
+* _v0.2._ Moved to a class, added translation files loading fn.

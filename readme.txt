@@ -5,8 +5,8 @@ Author:				Franz Josef Kaiser
 Author URI:			https://github.com/franz-josef-kaiser
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
-Tested up to:		3.1.1
-Stable tag:			0.1.3.
+Tested up to:		3.3
+Stable tag:			0.2
 
 == Description ==
 = Internal Link Checker =
@@ -50,21 +50,25 @@ add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10,
 
 = Languages =
 
-Translation ready
+Translation ready - If you want to help translating, please contact me.
 
 == Changelog ==
 
 = v0.1. =
-first version
+First version
 
 = v0.1.1. =
-should now work with post titles & post slugs/names.
+Should now work with post titles & post slugs/names.
 
 = v0.1.2. =
-meta box content now displays inside an unordered list.
+Meta box content now displays inside an unordered list.
 
 = v0.1.3. =
-added screenshot, readme.txt for wp.org repo & fixed not echoing if there are no links.
+Added screenshot, readme.txt for wp.org repo & fixed not echoing if there are no links.
+
+= v0.2. =
+Moved to class to clean up global namespace.
+Added next step for translations.
 
 == Screenshots ==
 
