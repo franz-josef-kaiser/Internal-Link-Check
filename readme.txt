@@ -16,7 +16,7 @@ Adds a meta box to the post edit screen that shows all internal links from other
 
 == Installation ==
 
-No explanation needed - works out of the box. Just activate and be save.
+No explanation needed - works out of the box. Just activate and be safe.
 
 == Frequently Asked Questions ==
 
