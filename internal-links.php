@@ -98,7 +98,7 @@ class oxoLinkCheck
 
 	/**
 	 * Adds the meta box to the post edit screen
-     
+     *
      * @return void
 	 */
 	function add_meta_box()
@@ -109,7 +109,7 @@ class oxoLinkCheck
 		// add meta box
 		add_meta_box( 
 			'',
-			sprintf( __( 'Posts linking to this posts internally: %d', self::TEXTDOMAIN ), $this->counter ),
+			sprintf( __( 'Posts linking to this post internally: %d', self::TEXTDOMAIN ), $this->counter ),
 			array( &$this, 'meta_box_cb' ),
 			'post' 
 	    );
