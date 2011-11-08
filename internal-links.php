@@ -78,24 +78,7 @@ class oxoLinkCheck
         add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
     }
 
-    /**
-     * Loads the translation files
-     * 
-     * @return void
-     */
-    function lang()
-    {
-        $dir	= get_stylesheet_directory();
-    	$locale	= get_locale();
-    	$file	= "{$dir}/lang/{$locale}.php";
-
-    	// Translation
-    	load_theme_textdomain( 'LANG', "{$dir}/lang" );
-
-    	locate_template( $file, true );
-    }
-
-
+    
 	/**
 	 * Adds the meta box to the post edit screen
      *
