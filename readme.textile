@@ -1,8 +1,8 @@
 h2. Internal Link Checker
 
-version: _v0.2_
+version: _v0.2.2_
 
-**Updates** available via the wp.org plugin repository.
+**Updates** available via the wp.org plugin repository: wordpress.org/extend/plugins/internal-link-checker/.
 
 Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box - **just activate**!
 
@@ -48,6 +48,10 @@ h3. Languages
 
 Translation ready - So far the translation files don't exist. If you want to help, please contact me.
 
+h4. Authors
+
+See AUTHORS file.
+
 ----------------------------------------------------------------
 
 h4. Changelog
@@ -58,3 +62,5 @@ h4. Changelog
 * _v0.1.2._ Added screenshot, readme.txt for wp.org repo & fixed not echoing that there are no links
 * _v0.1.3._ Minor fixes
 * _v0.2._ Moved to a class, added translation files loading fn.
+* _v0.2.1_ Minor fixes, added translation - props patrickmatsumura (see authors file)
+* _v0.2.2_ Added authors file, added check for unique links

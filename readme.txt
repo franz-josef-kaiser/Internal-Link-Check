@@ -1,12 +1,12 @@
 === Plugin Name ===
 Plugin Name:		Internal Link Checker
 Plugin URI:			https://github.com/franz-josef-kaiser/Internal-Link-Check
-Author:				Franz Josef Kaiser
-Author URI:			https://github.com/franz-josef-kaiser
+Author:				Franz Josef Kaiser, Patrick Matsumura
+Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2
+Stable tag:			0.2.2
 
 == Description ==
 = Internal Link Checker =
@@ -69,6 +69,15 @@ Added screenshot, readme.txt for wp.org repo & fixed not echoing if there are no
 = v0.2. =
 Moved to class to clean up global namespace.
 Added next step for translations.
+
+= v0.2.1 =
+Minor fixes.
+Added translation.
+props Patrick Matsumura
+
+= v0.2.2 =
+Added authors file.
+Made links unique and minor fixes.
 
 == Screenshots ==
 

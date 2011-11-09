@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser
 Author URI: 	https://github.com/franz-josef-kaiser
-Version:		0.2
+Version:		0.2.2
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 	(c) Copyright 2010 - 2011 by Franz Josef Kaiser
@@ -35,7 +35,7 @@ if( ! class_exists( 'WP' ) )
 
 // init class
 if ( is_admin() )
-    add_action( 'init', array( 'oxoLinkCheck', 'init' ) );
+	add_action( 'init', array( 'oxoLinkCheck', 'init' ) );
 
 if ( ! class_exists( 'oxoLinkCheck' ) )
 {
@@ -51,38 +51,39 @@ class oxoLinkCheck
 	// Container for sql result
 	public $sql_result;
 
-    // Constant for translation .po/.mo files
-    const TEXTDOMAIN = 'ilc';
+	// Constant for translation .po/.mo files
+	const TEXTDOMAIN = 'ilc';
 
-    /**
-     * Init - calls the class
-     * @return void
-     */
-    static public function init()
-    {
-    	$class = __CLASS__ ;
+	/**
+	 * Init - calls the class
+	 * @return void
+	 */
+	static public function init()
+	{
+		$class = __CLASS__ ;
 
-        // Class available in global scope
-        if ( empty ( $GLOBALS[ $class ] ) )
+		// Class available in global scope
+		if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
 		
-		load_plugin_textdomain( self::TEXTDOMAIN, false, basename(dirname(__FILE__)) . '/languages/' );			
-    }
+		$dir = basename( dirname( __FILE__ ) );
+		load_plugin_textdomain( self::TEXTDOMAIN, false, "{$dir}/lang/" );			
+	}
 
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
-    }
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
+	}
 
-    
+	
 	/**
 	 * Adds the meta box to the post edit screen
-     *
-     * @return void
+	 *
+	 * @return void
 	 */
 	function add_meta_box()
 	{
@@ -95,7 +96,7 @@ class oxoLinkCheck
 			sprintf( __( 'Posts linking to this post internally: %d', self::TEXTDOMAIN ), $this->counter ),
 			array( &$this, 'meta_box_cb' ),
 			'post' 
-	    );
+		);
 	}
 
 
@@ -126,40 +127,35 @@ class oxoLinkCheck
 
 	/**
 	 * Meta Box callback function
-     * 
-     * @return (string) $output
+	 * 
+	 * @return (string) $output
 	 */
 	function meta_box_cb()
 	{
 		$links = $this->sql_result;
 
-		$result = array();
-		if ( $links )
-		{
-			foreach( $links as $linkin_post )
-			{
-                # @todo Make links unique
-                $link = get_permalink( $linkin_post->ID );
-				$result[] = "<a href='$link'>{$linkin_post->post_title}</a>";
-			}
-		}
-		else 
-		{
+		if ( ! $links )
 			return _e( 'No posts are linking to this post.', self::TEXTDOMAIN );
+
+		$result = array();
+		foreach( $links as $linkin_post )
+		{
+			$link = get_permalink( $linkin_post->ID );
+			// If already in array: short circuit
+			if ( in_array( $link, $result, true ) )
+				continue;
+			$result[] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
 		}
 
 		// Filter the result or add anything
 		$result = apply_filters( 'internal_links_meta_box', $result, $links );
 		
-		if ( $result )
+		$output = '<ul>';
+		foreach ( $result as $link )
 		{
-			$output = '<ul>';
-				foreach ( $result as $link )
-				{
-					$output .= "<li>{$link}</li>";
-				}
-			$output .= '</ul>';
+			$output .= "<li>{$link}</li>";
 		}
+		$output .= '</ul>';
 
 		return print $output;
 	}
