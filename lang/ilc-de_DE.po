@@ -2,27 +2,37 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 14:33+0100\n"
-"PO-Revision-Date: 2011-11-09 14:33+0100\n"
+"POT-Creation-Date: 2011-11-09 15:47+0100\n"
+"PO-Revision-Date: 2011-11-09 16:03+0100\n"
 "Last-Translator: Franz Josef Kaiser <franzjosef@unserkaiser.at>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
-"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: .\n"
+"X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../internal-links.php:168
+# @ ilc
+#: ../internal-links.php:127
+#, php-format
+msgid "One post linking to this post internally"
+msgid_plural "Posts linking to this post internally: %s"
+msgstr[0] "Ein Artikel verlinkt auf diesen Artikel"
+msgstr[1] "Artikel die auf diesen Artikel verlinken: %s"
+
+# @ ilc
+#: ../internal-links.php:176
 msgid "No posts are linking to this post."
 msgstr "Keine Artikel verlinken auf diesen Artikel."
 
-#: ../internal-links.php:175
-#, fuzzy
+# @ ilc
+#: ../internal-links.php:183
 msgid "No title set"
 msgstr "Kein Titel verfügbar"
 
-#~ msgid "Posts linking to this post internally: %d"
-#~ msgstr "Artikel, die auf diesen Artikel verlinken: %d"

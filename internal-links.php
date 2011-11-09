@@ -3,8 +3,8 @@
 Plugin Name:	Internal links check
 Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
-Author:			Franz Josef Kaiser
-Author URI: 	https://github.com/franz-josef-kaiser
+Author:			Franz Josef Kaiser, Patrick Matsumura
+Author URI: 	https://plus.google.com/u/0/107110219316412982437
 Version:		0.2.6.4
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ if ( ! class_exists( 'oxoLinkCheck' ) )
 
 /**
  * @author Franz Josef Kaiser
+ * 
+ * translation tutorial
+ * @link http://wordpress.stackexchange.com/questions/33312/how-to-translate-plural-forms-for-themes-plugins-with-poedit/33314#33314
  */
 class oxoLinkCheck
 {
@@ -72,6 +75,7 @@ class oxoLinkCheck
 
 	/**
 	 * Constant for translation .po/.mo files
+	 * @todo deprecate & move to string instead of constant for automated translation of repo later
 	 * @var (string)
 	 */
 	const TEXTDOMAIN = 'ilc';
@@ -84,11 +88,11 @@ class oxoLinkCheck
 	static public function init()
 	{
 		$class = __CLASS__ ;
-
+_n
 		// Class available in global scope
 		if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
-		
+
 		$dir = basename( dirname( __FILE__ ) );
 		load_plugin_textdomain( self::TEXTDOMAIN, false, "{$dir}/lang" );			
 	}
@@ -117,11 +121,14 @@ class oxoLinkCheck
 		// add meta box
 		add_meta_box( 
 			 'link-check'
-			,_n(
-				 'One post linking to this post internally'
-				,sprintf( 'Posts linking to this post internally: %s', zeroise( $this->counter, 2 ) )
-				,$this->counter
-				,self::TEXTDOMAIN 
+			,sprintf( 
+				 _n(
+					 'One post linking to this post internally'
+					,'Posts linking to this post internally: %s'
+					,$this->counter
+					,self::TEXTDOMAIN 
+				 )
+				,zeroise( number_format_i18n( $this->counter ), 2 )
 			 )
 			,array( &$this, 'output' )
 			,'post' 
