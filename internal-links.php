@@ -52,6 +52,7 @@ class oxoLinkCheck
 	public $settings = array(
 		 'element'			=> 'li'
 		,'element_class'	=> ''
+		 // <ol> will be auto converted to <ul> 
 		,'container'		=> ''
 		,'container_class'	=> ''
 		,'nofollow'			=> false
@@ -161,20 +162,18 @@ class oxoLinkCheck
 	 */
 	function meta_box_cb()
 	{
-		$links = $this->sql_result;
-
-		if ( ! $links )
+		if ( ! $this->sql_result )
 			return _e( 'No posts are linking to this post.', self::TEXTDOMAIN );
 
 		$results = array();
-		foreach( $links as $linkin_post )
+		foreach( $this->sql_result as $post )
 		{
-			$link = get_permalink( $linkin_post->ID );
-			$results[ $linkin_post->post_type ][ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
+			$link = get_permalink( $post->ID );
+			$results[ $post->post_type ][ $post->ID ] = "<a href='{$link}'>{$post->post_title}</a>";
 		}
 
 		// Filter the result or add anything
-		$results = apply_filters( 'internal_links_meta_box', $results, $links );
+		$results = apply_filters( 'internal_links_meta_box', $results, $this->sql_result );
 
 		// Build markup
 		$output = '';
