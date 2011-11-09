@@ -33,14 +33,13 @@ if( ! class_exists( 'WP' ) )
 	exit;
 }
 
-
-
 // init class
 if ( is_admin() )
     add_action( 'init', array( 'oxoLinkCheck', 'init' ) );
 
 if ( ! class_exists( 'oxoLinkCheck' ) )
 {
+
 /**
  * @author Franz Josef Kaiser
  */
@@ -53,7 +52,7 @@ class oxoLinkCheck
 	public $sql_result;
 
     // Constant for translation .po/.mo files
-    const TEXTDOMAIN = 'linkchecker_textdomain';
+    const TEXTDOMAIN = 'ilc';
 
     /**
      * Init - calls the class
@@ -66,6 +65,8 @@ class oxoLinkCheck
         // Class available in global scope
         if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
+		
+		load_plugin_textdomain( self::TEXTDOMAIN, false, basename(dirname(__FILE__)) . '/languages/' );			
     }
 
 
@@ -74,28 +75,10 @@ class oxoLinkCheck
      */
     public function __construct()
     {
-        add_action( 'admin_init', array( &$this, 'lang' ) );
         add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
     }
 
-    /**
-     * Loads the translation files
-     * 
-     * @return void
-     */
-    function lang()
-    {
-        $dir	= get_stylesheet_directory();
-    	$locale	= get_locale();
-    	$file	= "{$dir}/lang/{$locale}.php";
-
-    	// Translation
-    	load_theme_textdomain( 'LANG', "{$dir}/lang" );
-
-    	locate_template( $file, true );
-    }
-
-
+    
 	/**
 	 * Adds the meta box to the post edit screen
      *
