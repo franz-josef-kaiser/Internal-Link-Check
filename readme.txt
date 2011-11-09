@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.2
+Stable tag:			0.2.4
 
 == Description ==
 = Internal Link Checker =
@@ -82,6 +82,10 @@ props Patrick Matsumura
 = v0.2.2 =
 Added authors file.
 Made links unique and minor fixes.
+
+= v0.2.4 =
+Added MarkUp & MarkUp filter functions that work based on an initial settings array.
+Can now be easier extended or used on front.
 
 == Screenshots ==
 

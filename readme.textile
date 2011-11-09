@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.2.2_
+version: _v0.2.4_
 
 **Updates** available via the official "wp.org plugin repository":wordpress.org/extend/plugins/internal-link-checker/.
 
@@ -68,3 +68,4 @@ h4. Changelog
 * _v0.2._ Moved to a class, added translation files loading fn.
 * _v0.2.1_ Minor fixes, added translation - props patrickmatsumura (see authors file)
 * _v0.2.2_ Added authors file, added check for unique links
+* _v0.2.4_ Added markup & markup filter functions and a initial settings array for further extension
