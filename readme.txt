@@ -50,7 +50,11 @@ add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10,
 
 = Languages =
 
-Translation ready - If you want to help translating, please contact me.
+Translation ready.
+If you want to help translating, please contact me on G+.
+
+Included:
+EN/DE (Patrick Matsumura)
 
 == Changelog ==
 

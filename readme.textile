@@ -46,7 +46,10 @@ Not needed.
 
 h3. Languages
 
-Translation ready - So far the translation files don't exist. If you want to help, please contact me.
+Translation ready.
+
+Languages included:
+EN/DE (Patrick Matsumura)
 
 h4. Authors
 
