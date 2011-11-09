@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser
 Author URI: 	https://github.com/franz-josef-kaiser
-Version:		0.2.6.3
+Version:		0.2.6.4
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 	(c) Copyright 2010 - 2011 by Franz Josef Kaiser
@@ -170,9 +170,10 @@ class oxoLinkCheck
 		$results = array();
 		foreach( $this->sql_results as $post )
 		{
-			$link	= get_permalink( $post->ID );
+			$link		= get_permalink( $post->ID );
 			// If no title was set: we care about it
-			$title	= $post->post_title ? $post->post_title : sprintf( __('%1$sNo title set%2$s', self::TEXTDOMAIN ), '<em>', '</em>' );
+			$no_title	= __( 'No title set', self::TEXTDOMAIN );
+			$title		= $post->post_title ? $post->post_title : "<em>{$no_title}</em>";
 			// Add to results array
 			$results[ $post->post_type ][ $post->ID ] = "<a href='{$link}'>{$title}</a>";
 		}

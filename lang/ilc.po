@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-08 17:11+0100\n"
-"PO-Revision-Date: 2011-11-08 17:14+0100\n"
-"Last-Translator: Patrick Matsumura <patrickmatsumura@gmail.com>\n"
+"POT-Creation-Date: 2011-11-09 14:33+0100\n"
+"PO-Revision-Date: 2011-11-09 14:33+0100\n"
+"Last-Translator: Franz Josef Kaiser <franzjosef@unserkaiser.at>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,12 +13,11 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../internal-links.php:117
-#, php-format
-msgid "Posts linking to this post internally: %d"
+#: ../internal-links.php:168
+msgid "No posts are linking to this post."
 msgstr ""
 
-#: ../internal-links.php:170
-msgid "No posts are linking to this post."
+#: ../internal-links.php:175
+msgid "No title set"
 msgstr ""
 
