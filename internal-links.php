@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser
 Author URI: 	https://github.com/franz-josef-kaiser
-Version:		0.2.6
+Version:		0.2.6.3
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 	(c) Copyright 2010 - 2011 by Franz Josef Kaiser
@@ -34,8 +34,7 @@ if( ! class_exists( 'WP' ) )
 }
 
 // init class
-if ( is_admin() )
-	add_action( 'init', array( 'oxoLinkCheck', 'init' ) );
+add_action( 'init', array( 'oxoLinkCheck', 'init' ) );
 
 if ( ! class_exists( 'oxoLinkCheck' ) )
 {
@@ -49,10 +48,10 @@ class oxoLinkCheck
 	 * Settings
 	 * @var (array)
 	 */
-	public $settings = array(
+	public $args = array(
 		 'element'			=> 'li'
 		,'element_class'	=> ''
-		 // <ol> will be auto converted to <ul> 
+		 // Att.: <ol> will be auto converted to <ul> 
 		,'container'		=> ''
 		,'container_class'	=> ''
 		,'nofollow'			=> false
@@ -69,7 +68,7 @@ class oxoLinkCheck
 	 * Container for sql result
 	 * @var (array)
 	 */
-	public $sql_result;
+	public $sql_results;
 
 	/**
 	 * Constant for translation .po/.mo files
@@ -100,7 +99,8 @@ class oxoLinkCheck
 	 */
 	public function __construct()
 	{
-		add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
+		if ( is_admin() )
+			add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
 	}
 
 	
@@ -112,18 +112,18 @@ class oxoLinkCheck
 	function add_meta_box()
 	{
 		// do math first
-		$this->get_sql_result();
+		$this->get_sql_results();
 
 		// add meta box
 		add_meta_box( 
-			 ''
+			 'link-check'
 			,_n(
 				 'One post linking to this post internally'
 				,sprintf( 'Posts linking to this post internally: %s', zeroise( $this->counter, 2 ) )
 				,$this->counter
 				,self::TEXTDOMAIN 
 			 )
-			,array( &$this, 'meta_box_cb' )
+			,array( &$this, 'output' )
 			,'post' 
 		);
 	}
@@ -135,45 +135,50 @@ class oxoLinkCheck
 	 * 
 	 * @return (object) $links 
 	 */
-	public function get_sql_result()
+	public function get_sql_results()
 	{
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
-		// sql
+		// SQL: newest first
 		$links = $GLOBALS['wpdb']->get_results( "
 			SELECT ID, post_title, post_date, post_content, post_type 
 			FROM {$GLOBALS['wpdb']->prefix}posts 
 			WHERE post_content 
 			LIKE '%{$current_link}%' 
-			ORDER BY post_date
+			ORDER BY post_date DESC
 		" );
 
 		// Counter for meta box title
 		$this->counter = count( $links );
 
-		return $this->sql_result = $links;
+		return $this->sql_results = $links;
 	}
 
 
 	/**
-	 * Meta Box callback function
+	 * Builds the output
+	 * Also used as meta box callback function
 	 * 
+	 * @uses markup()
 	 * @return (string) $output
 	 */
-	function meta_box_cb()
+	function output()
 	{
-		if ( ! $this->sql_result )
+		if ( ! $this->sql_results )
 			return _e( 'No posts are linking to this post.', self::TEXTDOMAIN );
 
 		$results = array();
-		foreach( $this->sql_result as $post )
+		foreach( $this->sql_results as $post )
 		{
-			$link = get_permalink( $post->ID );
-			$results[ $post->post_type ][ $post->ID ] = "<a href='{$link}'>{$post->post_title}</a>";
+			$link	= get_permalink( $post->ID );
+			// If no title was set: we care about it
+			$title	= $post->post_title ? $post->post_title : sprintf( __('%1$sNo title set%2$s', self::TEXTDOMAIN ), '<em>', '</em>' );
+			// Add to results array
+			$results[ $post->post_type ][ $post->ID ] = "<a href='{$link}'>{$title}</a>";
 		}
 
 		// Filter the result or add anything
-		$results = apply_filters( 'internal_links_meta_box', $results, $this->sql_result );
+		$results = apply_filters( 'internal_links_meta_box', $results, $this->sql_results );
 
 		// Build markup
 		$output = '';
@@ -185,7 +190,7 @@ class oxoLinkCheck
 		}
 
 		# >>>> return
-		if ( $this->settings['echo'] )
+		if ( $this->args['echo'] )
 			return print $output;
 
 		return $output;
@@ -208,9 +213,9 @@ class oxoLinkCheck
 		}
 
 		// In case someone forgot to set a container if the choosen element is 'li'
-		if ( $this->settings['container'] OR 'li' === $this->settings['element'] )
+		if ( $this->args['container'] OR 'li' === $this->args['element'] )
 		{
-			$output = "<%container%%container_class%>{$output}</%container%>";
+			$output  = "<%container%%container_class%>{$output}</%container%>";
 		}
 
 		$output = $this->markup_filter( $output );
@@ -231,12 +236,12 @@ class oxoLinkCheck
 		$markup = strtr( 
 			 $input
 			,array(
-			 	 '%el%'					=> $this->settings['element']
+			 	 '%el%'					=> $this->args['element']
 				 // auto correct wrong container types for <li> elements to <ul>
-				,'%container%'			=> 'li' === $this->settings['element']	? 'ul' : $this->settings['container']
-				,'%el_class%'			=> $this->settings['element_class']		? " class='{$this->settings['element_class']}'" : ''
-				,'%container_class%'	=> $this->settings['container_class']	? " class='{$this->settings['container_class']}'" : ''
-				,'%nofollow%'			=> $this->settings['nofollow']			? ' rel="nofollow"' : ''
+				,'%container%'			=> 'li' === $this->args['element']	? 'ul' : $this->args['container']
+				,'%el_class%'			=> $this->args['element_class']		? " class='{$this->args['element_class']}'" : ''
+				,'%container_class%'	=> $this->args['container_class']	? " class='{$this->args['container_class']}'" : ''
+				,'%nofollow%'			=> $this->args['nofollow']			? ' rel="nofollow"' : ''
 			) 
 		);
 
