@@ -46,6 +46,19 @@ if ( ! class_exists( 'oxoLinkCheck' ) )
 class oxoLinkCheck
 {
 	/**
+	 * Settings
+	 * @var (array)
+	 */
+	public $settings = array(
+		 'element'			=> 'li'
+		,'element_class'	=> ''
+		,'container'		=> 'ul'
+		,'container_class'	=> ''
+		,'nofollow'			=> true
+		,'echo'				=> true
+	);
+
+	/**
 	 * Counter var for linkin posts
 	 * @var (integer)
 	 */
@@ -147,7 +160,7 @@ class oxoLinkCheck
 		if ( ! $links )
 			return _e( 'No posts are linking to this post.', self::TEXTDOMAIN );
 
-		$result = array();
+		$results = array();
 		foreach( $links as $linkin_post )
 		{
 			$link = get_permalink( $linkin_post->ID );
@@ -156,20 +169,67 @@ class oxoLinkCheck
 				# continue;
 			# @todo maybe sort by post type
 			# $result[ $linkin_post->post_type ][ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
-			$result[ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
+			$results[ $linkin_post->ID ] = "<a href='{$link}'%nofollow%>{$linkin_post->post_title}</a>";
 		}
 
 		// Filter the result or add anything
-		$result = apply_filters( 'internal_links_meta_box', $result, $links );
-		
-		$output = '<ul>';
-		foreach ( $result as $link )
-		{
-			$output .= "<li>{$link}</li>";
-		}
-		$output .= '</ul>';
+		$results = apply_filters( 'internal_links_meta_box', $results, $links );
 
-		return print $output;
+		return $this->markup( $results );
+	}
+
+
+	/**
+	 * Builds the markup
+	 * 
+	 * @uses markup_filter()
+	 * @param (array) $results | SQL Query results ordered
+	 * @return (string) $output | Html markup
+	 */
+	public function markup( $results )
+	{
+		$output = '';
+		foreach ( $results as $link )
+		{
+			$output .= "<%el%%el_class%>{$link}</%el%>";
+		}
+
+		if ( $this->settings['container'] )
+		{
+			$output = "<%container%%container_class%>{$output}</%container%>";
+		}
+
+		$output = $this->markup_filter( $output );
+
+		# >>>> return
+		if ( $this->settings['echo'] )
+			return print $output;
+
+		return $output;
+	}
+
+
+	/**
+	 * Replaces markup placeholders
+	 * 
+	 * @param (string) $input
+	 * @return (string) $markup
+	 */
+	public function markup_filter( $input )
+	{
+		$markup = strtr( 
+			 $input
+			,array(
+			 	 '%el%'					=> $this->settings['element']
+				 // auto correct wrong container types for <li> elements to <ul>
+				,'%container%'			=> 'li' === $this->settings['element']	? 'ul' : $this->settings['container']
+				,'%el_class%'			=> $this->settings['element_class']		? " class='{$this->settings['element_class']}'" : ''
+				,'%container_class%'	=> $this->settings['container_class']	? " class='{$this->settings['container_class']}'" : ''
+				,'%nofollow%'			=> $this->settings['nofollow']			? ' rel="nofollow"' : ''
+			) 
+		);
+
+		return $markup;
 	}
 } // END Class oxoLinkCheck
 
