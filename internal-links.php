@@ -141,10 +141,12 @@ class oxoLinkCheck
 		foreach( $links as $linkin_post )
 		{
 			$link = get_permalink( $linkin_post->ID );
-			// If already in array: short circuit
-			if ( in_array( $link, $result, true ) )
-				continue;
-			$result[] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
+			// If already in array: short circuit via ID
+			# if ( in_array( $linkin_post->ID, array_keys( $result ), true ) )
+				# continue;
+			# @todo maybe sort by post type
+			# $result[ $linkin_post->post_type ][ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
+			$result[ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
 		}
 
 		// Filter the result or add anything
