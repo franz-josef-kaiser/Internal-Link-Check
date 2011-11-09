@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.5
+Stable tag:			0.2.6
 
 == Description ==
 = Internal Link Checker =
@@ -88,7 +88,11 @@ Added MarkUp & MarkUp filter functions that work based on an initial settings ar
 Can now be easier extended or used on front.
 
 = v0.2.5 =
-Added auto-correction for li elements & container
+Added auto-correction for li elements & container.
+
+= v0.2.6 =
+Added singular/plural translation strings.
+Grouped results by post type column.
 
 == Screenshots ==
 

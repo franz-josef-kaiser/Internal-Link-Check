@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser
 Author URI: 	https://github.com/franz-josef-kaiser
-Version:		0.2.5
+Version:		0.2.6
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 	(c) Copyright 2010 - 2011 by Franz Josef Kaiser
@@ -54,7 +54,7 @@ class oxoLinkCheck
 		,'element_class'	=> ''
 		,'container'		=> ''
 		,'container_class'	=> ''
-		,'nofollow'			=> true
+		,'nofollow'			=> false
 		,'echo'				=> true
 	);
 
@@ -115,10 +115,15 @@ class oxoLinkCheck
 
 		// add meta box
 		add_meta_box( 
-			'',
-			sprintf( __( 'Posts linking to this post internally: %d', self::TEXTDOMAIN ), $this->counter ),
-			array( &$this, 'meta_box_cb' ),
-			'post' 
+			 ''
+			,_n(
+				 'One post linking to this post internally'
+				,sprintf( 'Posts linking to this post internally: %s', zeroise( $this->counter, 2 ) )
+				,$this->counter
+				,self::TEXTDOMAIN 
+			 )
+			,array( &$this, 'meta_box_cb' )
+			,'post' 
 		);
 	}
 
@@ -126,6 +131,7 @@ class oxoLinkCheck
 	/**
 	 * SQL Query
 	 * Adds content to two class vars: The resulting array & the counter
+	 * 
 	 * @return (object) $links 
 	 */
 	public function get_sql_result()
@@ -134,7 +140,7 @@ class oxoLinkCheck
 		$current_link = get_permalink( $GLOBALS['post']->ID );
 		// sql
 		$links = $GLOBALS['wpdb']->get_results( "
-			SELECT ID, post_title, post_date, post_content 
+			SELECT ID, post_title, post_date, post_content, post_type 
 			FROM {$GLOBALS['wpdb']->prefix}posts 
 			WHERE post_content 
 			LIKE '%{$current_link}%' 
@@ -164,18 +170,26 @@ class oxoLinkCheck
 		foreach( $links as $linkin_post )
 		{
 			$link = get_permalink( $linkin_post->ID );
-			// If already in array: short circuit via ID
-			# if ( in_array( $linkin_post->ID, array_keys( $result ), true ) )
-				# continue;
-			# @todo maybe sort by post type
-			# $result[ $linkin_post->post_type ][ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
-			$results[ $linkin_post->ID ] = "<a href='{$link}'%nofollow%>{$linkin_post->post_title}</a>";
+			$results[ $linkin_post->post_type ][ $linkin_post->ID ] = "<a href='{$link}'>{$linkin_post->post_title}</a>";
 		}
 
 		// Filter the result or add anything
 		$results = apply_filters( 'internal_links_meta_box', $results, $links );
 
-		return $this->markup( $results );
+		// Build markup
+		$output = '';
+		foreach ( $results as $name => $posts )
+		{
+			$name	 = _n( ucfirst( $name ), ucfirst( $name ).'s', count( $posts ), self::TEXTDOMAIN );
+			$output .= "<h4>{$name}:</h4>";
+			$output .= $this->markup( $posts );
+		}
+
+		# >>>> return
+		if ( $this->settings['echo'] )
+			return print $output;
+
+		return $output;
 	}
 
 
@@ -202,16 +216,13 @@ class oxoLinkCheck
 
 		$output = $this->markup_filter( $output );
 
-		# >>>> return
-		if ( $this->settings['echo'] )
-			return print $output;
-
 		return $output;
 	}
 
 
 	/**
 	 * Replaces markup placeholders
+	 * Deletes placeholders if the settings array contains an empty string
 	 * 
 	 * @param (string) $input
 	 * @return (string) $markup
