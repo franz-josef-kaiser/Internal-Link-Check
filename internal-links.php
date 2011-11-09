@@ -45,14 +45,24 @@ if ( ! class_exists( 'oxoLinkCheck' ) )
  */
 class oxoLinkCheck
 {
-	// Counter var for linkin posts
+	/**
+	 * Counter var for linkin posts
+	 * @var (integer)
+	 */
 	public $counter;
 
-	// Container for sql result
+	/**
+	 * Container for sql result
+	 * @var (array)
+	 */
 	public $sql_result;
 
-	// Constant for translation .po/.mo files
+	/**
+	 * Constant for translation .po/.mo files
+	 * @var (string)
+	 */
 	const TEXTDOMAIN = 'ilc';
+
 
 	/**
 	 * Init - calls the class
@@ -67,7 +77,7 @@ class oxoLinkCheck
 			$GLOBALS[ $class ] = new $class;
 		
 		$dir = basename( dirname( __FILE__ ) );
-		load_plugin_textdomain( self::TEXTDOMAIN, false, "{$dir}/lang/" );			
+		load_plugin_textdomain( self::TEXTDOMAIN, false, "{$dir}/lang" );			
 	}
 
 
