@@ -19,15 +19,26 @@ if( ! class_exists( 'WP' ) )
 class ilcTable extends WP_List_Table
 {
 	/**
+	 * l10n translation domain
+	 * @var (string)
+	 */
+	var $textdomain;
+
+
+	/**
 	 * Constructor
 	 * 
 	 * @return void
 	 */
 	public function __construct()
 	{
-		// parent class vars
-		$screen			= get_current_screen();
-		$this->screen	= $screen->id;
+		// textdomain
+		$trace				= debug_backtrace();
+		$plugin_data		= get_plugin_data( $trace[0]['file'] );
+		$this->textdomain	= $plugin_data['TextDomain'];
+		// screen
+		$screen				= get_current_screen();
+		$this->screen		= $screen->id;
 
 		parent :: __construct( array(
 			 'singular'	=> 'internal link'
@@ -41,9 +52,9 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::no_items()
 	 */
-	function no_items() 
+	public function no_items() 
 	{
-		_e( 'No links found.', 'ilc' );
+		_e( 'No links found.', $this->textdomain );
 	}
 
 
@@ -54,9 +65,9 @@ class ilcTable extends WP_List_Table
 	public function get_columns()
 	{
 		return array(
-			 'ID'			=> __( 'ID', 'ilc' )
-			,'post_title'	=> __( 'Title', 'ilc' )
-			,'post_date'	=> __( 'Date', 'ilc' )
+			 'ID'			=> __( 'ID',	$this->textdomain )
+			,'post_title'	=> __( 'Title',	$this->textdomain )
+			,'post_date'	=> __( 'Date',	$this->textdomain )
 		);
 	}
 
@@ -65,7 +76,7 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::get_sortable_columns()
 	 */
-	function get_sortable_columns() 
+	public function get_sortable_columns() 
 	{
 		return;
 		# @todo Only if moving to ajax, pagination and such
