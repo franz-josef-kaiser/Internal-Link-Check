@@ -67,6 +67,8 @@ class ilcTable extends WP_List_Table
 	 */
 	function get_sortable_columns() 
 	{
+		return;
+		# @todo Only if moving to ajax, pagination and such
 		return array(
 			 'ID'			=> 'ID'
 			,'post_title'	=> 'post_title'
