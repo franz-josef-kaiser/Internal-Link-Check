@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.2.6_
+version: _v0.2.7_
 
 **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
@@ -71,3 +71,10 @@ h4. Changelog
 * _v0.2.4_ Added markup & markup filter functions and a initial settings array for further extension
 * _v0.2.5_ Added auto-correction for li elements & container
 * _v0.2.6_ Added singular/plural translation strings. Grouped results by post type column.
+* _v0.2.6.1_ Reworked translation files.
+* _v0.2.6.2_ Avoids loading on every $_REQUEST. Now only loads on post.php in admin (post/page/cpt new/edit) screens
+* _v0.2.6.3_ Added mu-plugins directory for l10n lang files loading.
+* _v0.2.6.4_ Changed meta box title to "Internal Links" to not have long titles in screen options tab.
+* _v0.2.6.5_ Added wrapper function to call plugin data
+* _v0.2.6.6_ Moved Text Domain to plugin header comment for easier maintainance and transparency 
+* _v0.2.7_ Added native WP admin UI table to the meta box

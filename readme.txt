@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.6
+Stable tag:			0.2.7
 
 == Description ==
 = Internal Link Checker =
@@ -93,6 +93,27 @@ Added auto-correction for li elements & container.
 = v0.2.6 =
 Added singular/plural translation strings.
 Grouped results by post type column.
+
+= v0.2.6.1 =
+Reworked translation files.
+
+= v0.2.6.2 =
+Avoids loading on every $_REQUEST. Now only loads on post.php in admin (post/page/cpt new/edit) screens
+
+= v0.2.6.3 =
+Added mu-plugins directory for l10n lang files loading.
+
+= v0.2.6.4 =
+Changed meta box title to "Internal Links" to not have long titles in screen options tab.
+
+= v0.2.6.5 =
+Added wrapper function to call plugin data
+
+= v0.2.6.6 =
+Moved Text Domain to plugin header comment for easier maintainance and transparency 
+
+= v0.2.7 =
+Added native WP admin UI table to the meta box 
 
 == Screenshots ==
 
