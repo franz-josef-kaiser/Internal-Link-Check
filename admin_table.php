@@ -78,8 +78,6 @@ class ilcTable extends WP_List_Table
 	 */
 	public function get_sortable_columns() 
 	{
-		return;
-		# @todo Only if moving to ajax, pagination and such
 		return array(
 			 'ID'			=> 'ID'
 			,'post_title'	=> 'post_title'
@@ -98,7 +96,7 @@ class ilcTable extends WP_List_Table
 	{
 		$columns		= $this->get_columns();
 		$hidden			= array();
-		$sortable		= $this->get_sortable_columns();
+		$sortable		= array(); # $this->get_sortable_columns();
 
         $this->_column_headers = array( 
         	 $columns
@@ -141,5 +139,16 @@ class ilcTable extends WP_List_Table
 	public function column_default( $item, $column_name )
 	{
 		return $item->$column_name;
+	}
+
+
+	/**
+	 * Temp. Override of table nav to avoid gaps in UI
+	 * (non-PHPdoc)
+	 * @see WP_List_Table::display_tablenav()
+	 */
+	public function display_tablenav( $which )
+	{
+		return;
 	}
 }

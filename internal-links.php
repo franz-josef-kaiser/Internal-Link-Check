@@ -204,6 +204,9 @@ class ilcInit
 		$table->prepare_items();
 		$table->display();
 
+		# @todo temp until table nav in place
+		echo '<br class="clear" />';
+
 		// Display number of posts
 		$count = count( $GLOBALS['wpdb']->last_result );
 		printf( 
