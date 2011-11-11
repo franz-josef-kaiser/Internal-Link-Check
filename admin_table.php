@@ -105,6 +105,13 @@ class ilcTable extends WP_List_Table
         );
 
         $data = ilcInit::the_sql_results();
+		// If no title was set: we care about it
+		foreach ( $data as $key => $post )
+		{
+			$no_title = __( 'No title set', $this->textdomain );
+			if ( ! $post->post_title )
+				$data[ $key ]->post_title = "<em>{$no_title}</em>";
+		}
 
         // Pagination Data
         /*

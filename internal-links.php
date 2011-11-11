@@ -9,7 +9,7 @@ Version:		0.2.7.1
 Text Domain:	ilc
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-	(c) Copyright 2010 - 2011 by Franz Josef Kaiser
+	(c) Copyright 2010 - 2011 by Franz Josef Kaiser <mailto: office@unserkaiser.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -242,6 +242,12 @@ class ilcInit
 	}
 
 
+	/**
+	 * Wrapper to return the sql results for the admin table class
+	 * 
+	 * @see WP_List_Table::prepare_items()
+	 * @return (array) $sql_results
+	 */
 	public function the_sql_results()
 	{
 		return isset( $this->sql_results ) ? $this->sql_results : self::get_sql_results();
