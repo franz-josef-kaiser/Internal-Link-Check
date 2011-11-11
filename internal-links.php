@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.2.7.1
+Version:		0.2.8
 Text Domain:	ilc
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -62,6 +62,14 @@ class ilcInit
 	 * @var (string)
 	 */
 	public static $rel_path;
+
+	/**
+	 * Used for update notices
+	 * Fetches the readme file from the official plugin repo trunk.
+	 * Adds to the "in_plugin_update_message-$file" hook
+	 * @var unknown_type
+	 */
+	public $remote_readme = 'http://plugins.trac.wordpress.org/browser/internal-link-checker/trunk/readme.txt?format=txt';
 
 	/**
 	 * Settings
@@ -122,13 +130,22 @@ class ilcInit
 
 		if ( is_admin() )
 		{
+			global $pagenow;
+			if ( 'plugins.php' === $pagenow )
+			{
+				// Better update message
+				$file	= basename( __FILE__ );
+				$folder	= basename( dirname( __FILE__ ) );
+				$hook = "in_plugin_update_message-{$folder}/{$file}";
+				add_action( $hook, array( &$this, 'update_message' ), 20, 2 );
+			}
 			// avoid loading on every admin $_REQUEST
 			// abort if not on post.php (post/page/cpt edit/new) screens
-			if ( 'post.php' !== $GLOBALS['pagenow'] )
-				return;
-
-			add_action( 'admin_init',		array( &$this, 'load_extensions' ) );
-			add_action( 'add_meta_boxes',	array( &$this, 'add_meta_box' ) );
+			elseif ( 'post.php' === $pagenow )
+			{
+				add_action( 'admin_init',		array( &$this, 'load_extensions' ) );
+				add_action( 'add_meta_boxes',	array( &$this, 'add_meta_box' ) );
+			}
 		}
 	}
 
@@ -348,6 +365,50 @@ class ilcInit
 		);
 
 		return $markup;
+	}
+
+
+	/* =============== Helper & other ================= */
+
+
+	/**
+	 * Displays an update message for plugin list screens.
+	 * Shows only the version updates from the current until the newest version
+	 * 
+	 * @param (array) $plugin_data
+	 * @param (object) $r
+	 * @return (string) $output
+	 */
+	public function update_message( $plugin_data, $r )
+	{
+		// readme contents
+		$data		= file_get_contents( $this->remote_readme );
+		$changelog	= stristr( $data, '== Changelog ==' );
+		$changelog	= stristr( $changelog, '== Screenshots ==', true );
+		// only return for the current & later versions
+		$curr_ver	= $this->get_plugin_data();
+		$changelog	= stristr( $changelog, "= v{$curr_ver}" );
+
+		# >>>> output
+		$output  = '<hr /><div style="font-weight: normal;">';
+		$output .= sprintf( __( 
+				 'The Update from %1$s to %2$s brings you the following new features, bug fixes and additions.'
+				,$this->get_textdomain() )
+			,$curr_ver
+			,$r->new_version 
+		);
+		$output .= "<pre>{$changelog}</pre>";
+		$output .= sprintf( __( 
+				 'You can also check the nightly builds of %1$sour development repository%2$s on GitHub.
+				 If you got ideas, feature request or want to help with pull requests, please feel free to do so on GitHub.%3$s'
+				,$this->get_textdomain() )
+			,'<a href="https://github.com/franz-josef-kaiser/Internal-Link-Check">'
+			,'</a>'
+			,'</div>'
+		);
+		# <<<< output
+
+		return print $output;
 	}
 } // END Class ilcInit
 
