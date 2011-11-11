@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.2.7_
+version: _v0.2.7.1_
 
 **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
@@ -77,4 +77,5 @@ h4. Changelog
 * _v0.2.6.4_ Changed meta box title to "Internal Links" to not have long titles in screen options tab.
 * _v0.2.6.5_ Added wrapper function to call plugin data
 * _v0.2.6.6_ Moved Text Domain to plugin header comment for easier maintainance and transparency 
-* _v0.2.7_ Added native WP admin UI table to the meta box
+* _v0.2.7_ Added native WP admin UI table to the meta box 
+* _v0.2.7.1_ Moved to admin edit post permalinks

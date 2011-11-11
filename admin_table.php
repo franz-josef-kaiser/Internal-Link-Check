@@ -104,13 +104,18 @@ class ilcTable extends WP_List_Table
         	,$sortable 
         );
 
-        $data = ilcInit::the_sql_results();
-		// If no title was set: we care about it
+        $data			= ilcInit::the_sql_results();
+        // Prepare the data
+        $permalink		= __( 'Permalink to:', $this->textdomain );
 		foreach ( $data as $key => $post )
 		{
-			$no_title = __( 'No title set', $this->textdomain );
-			if ( ! $post->post_title )
-				$data[ $key ]->post_title = "<em>{$no_title}</em>";
+			$link		= get_edit_post_link( $post->ID );
+
+			// If no title was set: we care about it
+			$no_title	= __( 'No title set', $this->textdomain );
+			$title		= ! $post->post_title ? "<em>{$no_title}</em>" : $post->post_title;
+
+			$data[ $key ]->post_title = "<a title='{$permalink} {$title}' href='{$link}'>{$title}</a>";
 		}
 
         // Pagination Data

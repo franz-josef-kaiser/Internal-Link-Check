@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.7
+Stable tag:			0.2.7.1
 
 == Description ==
 = Internal Link Checker =
@@ -113,7 +113,10 @@ Added wrapper function to call plugin data
 Moved Text Domain to plugin header comment for easier maintainance and transparency 
 
 = v0.2.7 =
-Added native WP admin UI table to the meta box 
+Added native WP admin UI table to the meta box
+
+= v0.2.7.1 =
+Moved to admin edit post permalinks 
 
 == Screenshots ==
 
