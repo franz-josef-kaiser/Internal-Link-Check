@@ -106,7 +106,7 @@ class ilcTable extends WP_List_Table
 
         $data			= ilcInit::the_sql_results();
         // Prepare the data
-        $permalink		= __( 'Permalink to:', $this->textdomain );
+        $permalink		= __( 'Edit:', $this->textdomain );
 		foreach ( $data as $key => $post )
 		{
 			$link		= get_edit_post_link( $post->ID );
