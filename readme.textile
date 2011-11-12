@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.2.8_
+version: _v0.2.9_
 
 **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
@@ -14,29 +14,28 @@ No examples needed - works out of the box.
 
 h3. How-to
 
-This shows how to modify the output inside the internal link checker meta box:
+This shows how to modify the output inside the internal link checker meta box via the action:
 
 <pre>
-function modify_checklink_metabox_content( $result, $links )
-{
-	global $post;
-	// Uncomment the follwing line to see what the $links array contains
-	// The links array contains all posts (and their respective data) that link to the current post
-	/*
-	echo '<'.'pre>';
-		print_r( $links );
-	echo '<'.'/pre>';
-	 */
+function modify_internallink_metabox_content( $sql_result ) {
+	// Uncomment the follwing line to see what the $sql_result array contains
+	// The links array contains all posts (and their respective data) 
+	// that link to the current post
+	echo '<'.'pre>'.var_dump( $sql_result ).'<'.'/pre>';
 
 	// Now handle the result:
-	foreach ( $result as $link )
+	foreach ( $sql_result as $link )
 	{
 		// do stuff
 	}
 
-	return $result;
+	return print $sql_result;
 }
-add_filter( 'internal_links_meta_box', 'modify_checklink_metabox_content', 10, 2 );
+// Add the action to the admin_init hook
+function add_internallink_action() {
+	add_action( 'internal_links_meta_box', 'modify_internallink_metabox_content', 10 ); 
+}
+add_action( 'admin_init', 'add_internallink_action' );
 </pre>
 
 
@@ -80,3 +79,4 @@ h4. Changelog
 * _v0.2.7_ Added native WP admin UI table to the meta box 
 * _v0.2.7.1_ Moved to admin edit post permalinks 
 * _v0.2.8_ Added better update messages for plugin list screen
+* _v0.2.9_ Moved from a filter for the meta box to an action to override the output of the meta box content

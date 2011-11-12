@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.2.8
+Version:		0.2.9
 Text Domain:	ilc
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -216,6 +216,13 @@ class ilcInit
 	 */
 	public function load_table()
 	{
+		// Action: Overrides the content of the meta box
+		if ( has_action( 'internal_links_meta_box' ) )
+		{
+			do_action( 'internal_links_meta_box', $this->the_sql_results() );
+			return;
+		}
+
 		// Display table
 		$table = new ilcTable();
 		$table->prepare_items();
@@ -298,7 +305,7 @@ class ilcInit
 		# <<<< build links array
 
 		// Filter the result or add anything
-		$results = apply_filters( 'internal_links_meta_box', $results, $this->sql_results );
+		$results = apply_filters( 'internal_links', $results, $this->sql_results );
 
 		# >>>> markup
 		foreach ( $results as $name => $posts )

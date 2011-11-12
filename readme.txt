@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.8
+Stable tag:			0.2.9
 
 == Description ==
 = Internal Link Checker =
@@ -120,6 +120,10 @@ Moved to admin edit post permalinks
 
 = v0.2.8 =
 Added better update messages for plugin list screen 
+
+= v0.2.9 =
+Check for remote readme file availibility before get file contents on update
+The meta box content filter disappeared and was replaced by an action to override the content 
 
 == Screenshots ==
 
