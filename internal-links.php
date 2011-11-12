@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.2.9
+Version:		0.2.9.1
 Text Domain:	ilc
 License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -232,7 +232,8 @@ class ilcInit
 		echo '<br class="clear" />';
 
 		// Display number of posts
-		$count = count( $GLOBALS['wpdb']->last_result );
+		# $count = count( $GLOBALS['wpdb']->last_result );
+		$count = count( $this->the_sql_results() );
 		printf( 
 			 _n(
 				 'One post linking to this post.'
