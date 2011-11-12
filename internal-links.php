@@ -67,7 +67,7 @@ class ilcInit
 	 * Used for update notices
 	 * Fetches the readme file from the official plugin repo trunk.
 	 * Adds to the "in_plugin_update_message-$file" hook
-	 * @var unknown_type
+	 * @var (string)
 	 */
 	public $remote_readme = 'http://plugins.trac.wordpress.org/browser/internal-link-checker/trunk/readme.txt?format=txt';
 
@@ -381,6 +381,9 @@ class ilcInit
 	 */
 	public function update_message( $plugin_data, $r )
 	{
+		if ( ! is_readable( $this->remote_readme ) )
+			return;
+
 		// readme contents
 		$data		= file_get_contents( $this->remote_readme );
 		$changelog	= stristr( $data, '== Changelog ==' );
