@@ -6,7 +6,7 @@ Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
 Requires at least:	0.x
 Tested up to:		3.3
-Stable tag:			0.2.9
+Stable tag:			0.3
 
 == Description ==
 = Internal Link Checker =
@@ -75,12 +75,12 @@ Moved to class to clean up global namespace
 Added next step for translations
 
 = v0.2.1 =
-Minor fixes.
-Added translation.
+Minor fixes
+Added translation
 props Patrick Matsumura
 
 = v0.2.2 =
-Added authors file.
+Added authors file
 Made links unique and minor fixes
 
 = v0.2.4 =
@@ -91,17 +91,17 @@ Can now be easier extended or used on front
 Added auto-correction for li elements & container
 
 = v0.2.6 =
-Added singular/plural translation strings.
-Grouped results by post type column.
+Added singular/plural translation strings
+Grouped results by post type column
 
 = v0.2.6.1 =
-Reworked translation files.
+Reworked translation files
 
 = v0.2.6.2 =
 Avoids loading on every $_REQUEST. Now only loads on post.php in admin (post/page/cpt new/edit) screens
 
 = v0.2.6.3 =
-Added mu-plugins directory for l10n lang files loading.
+Added mu-plugins directory for l10n lang files loading
 
 = v0.2.6.4 =
 Changed meta box title to "Internal Links" to not have long titles in screen options tab
@@ -110,20 +110,23 @@ Changed meta box title to "Internal Links" to not have long titles in screen opt
 Added wrapper function to call plugin data
 
 = v0.2.6.6 =
-Moved Text Domain to plugin header comment for easier maintainance and transparency 
+Moved Text Domain to plugin header comment for easier maintainance and transparency
 
 = v0.2.7 =
 Added native WP admin UI table to the meta box
 
 = v0.2.7.1 =
-Moved to admin edit post permalinks 
+Moved to admin edit post permalinks
 
 = v0.2.8 =
-Added better update messages for plugin list screen 
+Added better update messages for plugin list screen
 
 = v0.2.9 =
 Check for remote readme file availibility before get file contents on update
-The meta box content filter disappeared and was replaced by an action to override the content 
+The meta box content filter disappeared and was replaced by an action to override the content
+
+= v0.3 =
+Final stable release with new WP Admin Tables class API in use. Typo & Language fixes, fully translated.
 
 == Screenshots ==
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 15:47+0100\n"
-"PO-Revision-Date: 2011-11-09 16:03+0100\n"
+"POT-Creation-Date: 2011-11-14 19:26+0100\n"
+"PO-Revision-Date: 2011-11-14 19:29+0100\n"
 "Last-Translator: Franz Josef Kaiser <franzjosef@unserkaiser.at>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,21 +18,56 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-# @ ilc
-#: ../internal-links.php:127
-#, php-format
-msgid "One post linking to this post internally"
-msgid_plural "Posts linking to this post internally: %s"
-msgstr[0] "Ein Artikel verlinkt auf diesen Artikel"
-msgstr[1] "Artikel die auf diesen Artikel verlinken: %s"
+#: ../admin_table.php:57
+msgid "No links found."
+msgstr "Keine Links gefunden."
+
+#: ../admin_table.php:68
+msgid "ID"
+msgstr "ID"
+
+#: ../admin_table.php:69
+msgid "Title"
+msgstr "Titel"
+
+#: ../admin_table.php:70
+msgid "Date"
+msgstr "Datum"
+
+#: ../admin_table.php:109
+msgid "Edit:"
+msgstr "Bearbeite:"
 
 # @ ilc
-#: ../internal-links.php:176
+#: ../admin_table.php:115
+#: ../internal-links.php:301
+msgid "No title set"
+msgstr "Kein Titel verfügbar"
+
+#: ../internal-links.php:204
+msgid "Internal Links"
+msgstr "Interne Links"
+
+# @ ilc
+#: ../internal-links.php:239
+#, php-format
+msgid "One post linking to this post."
+msgid_plural "Posts linking to this post: %s"
+msgstr[0] "Ein Artikel verlinkt auf diesen Artikel."
+msgstr[1] "Artikel, die auf diesen Artikel verlinken: %s"
+
+# @ ilc
+#: ../internal-links.php:292
 msgid "No posts are linking to this post."
 msgstr "Keine Artikel verlinken auf diesen Artikel."
 
-# @ ilc
-#: ../internal-links.php:183
-msgid "No title set"
-msgstr "Kein Titel verfügbar"
+#: ../internal-links.php:406
+#, php-format
+msgid "The Update from %1$s to %2$s brings you the following new features, bug fixes and additions."
+msgstr "Das Update von %1$s auf %2$s bringt folgende neue Funktionen, Fehlerbehebungen und Ergänzungen."
+
+#: ../internal-links.php:413
+#, php-format
+msgid "You can also check the nightly builds of %1$sour development repository%2$s on GitHub. If you got ideas, feature request or want to help with pull requests, please feel free to do so on GitHub.%3$s"
+msgstr "Sie können auch die nightly builds aus %1$sunserem Entwicklungs-Repository%2$s auf GitHub herunter laden. Wenn Sie Ideen, Funktionserweiterungsvorschläge haben, oder uns mit pull-requests helfen wollen, tun Sie dies bitte auf GitHub.%3$s"
 

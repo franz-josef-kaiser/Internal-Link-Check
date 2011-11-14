@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.2.9_
+version: _v0.3_
 
 **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
@@ -80,3 +80,4 @@ h4. Changelog
 * _v0.2.7.1_ Moved to admin edit post permalinks 
 * _v0.2.8_ Added better update messages for plugin list screen
 * _v0.2.9_ Moved from a filter for the meta box to an action to override the output of the meta box content
+* _v0.3_ Language & Typo fixes. Final, stable 0.3 release.
