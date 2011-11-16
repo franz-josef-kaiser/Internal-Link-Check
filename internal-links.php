@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.4
+Version:		0.4.1
 Text Domain:	ilc
 License:		GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -52,12 +52,16 @@ class ilcInit
 {
 	/**
 	 * Plugin Base directory
+	 * 
+	 * @since 0.2.7
 	 * @var (string)
 	 */
 	public static $dir;
 
 	/**
 	 * Relative Path from plugin root dir
+	 * 
+	 * @since 0.2.7
 	 * @var (string)
 	 */
 	public static $rel_path;
@@ -66,12 +70,15 @@ class ilcInit
 	 * Used for update notices
 	 * Fetches the readme file from the official plugin repo trunk.
 	 * Adds to the "in_plugin_update_message-$file" hook
+	 * 
 	 * @var (string)
 	 */
 	public $remote_readme = 'http://plugins.trac.wordpress.org/browser/internal-link-checker/trunk/readme.txt?format=txt';
 
 	/**
 	 * Settings
+	 * 
+	 * @since 0.2.2
 	 * @var (array)
 	 */
 	public $args = array(
@@ -86,6 +93,8 @@ class ilcInit
 
 	/**
 	 * Container for sql result
+	 * 
+	 * @since 0.2
 	 * @var (array)
 	 */
 	public $sql_results;
@@ -95,6 +104,7 @@ class ilcInit
 	 * Init
 	 * Instantiates the class and loads translation files
 	 * 
+	 * @since 0.2
 	 * @return void
 	 */
 	static public function init()
@@ -105,6 +115,7 @@ class ilcInit
 		if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
 
+	 	# @since 0.2.2
 		# @link http://wordpress.stackexchange.com/questions/33312/how-to-translate-plural-forms-for-themes-plugins-with-poedit/33314#33314 Translation Tutorial by the author
 		// l10n translation files
 		$dir		= basename( dirname( __FILE__ ) );
@@ -119,6 +130,7 @@ class ilcInit
 	/**
 	 * Constructor
 	 * 
+	 * @since 0.2
 	 * @return void
 	 */
 	public function __construct()
@@ -153,6 +165,7 @@ class ilcInit
 	/**
 	 * Extension/File/Class loader
 	 * 
+	 * @since 0.2.7
 	 * @return void
 	 */
 	public function load_extensions()
@@ -169,6 +182,7 @@ class ilcInit
 	/**
 	 * Plugin Header Comment data
 	 *
+	 * @since 0.2.8
 	 * @uses   get_plugin_data
 	 * @param (string) $value | default = 'Version'; Valid: see Header Comment Block
 	 * @return (string) 
@@ -183,6 +197,7 @@ class ilcInit
 	/**
 	 * Wrapper for get_plugin_data()
 	 * 
+	 * @since 0.2.8
 	 * @return (string) $textdomain
 	 */
 	public function get_textdomain() 
@@ -194,6 +209,7 @@ class ilcInit
 	/**
 	 * Adds the meta box to the post edit screen
 	 *
+	 * @since 0.2
 	 * @return void
 	 */
 	public function add_meta_box()
@@ -212,39 +228,19 @@ class ilcInit
 	 * Adds a native admin UI table
 	 * Callback fn for add_meta_box()
 	 * 
+	 * @since 0.2 | renamed from meta_box_cb()
 	 * @return void
 	 */
 	public function load_table()
 	{
 		// Action: Overrides the content of the meta box
 		if ( has_action( 'internal_links_meta_box' ) )
-		{
-			do_action( 'internal_links_meta_box', $this->the_sql_results() );
-			return;
-		}
+			return do_action( 'internal_links_meta_box', $this->the_sql_results() );
 
 		// Display table
 		$table = new ilcTable();
 		$table->prepare_items();
 		$table->display();
-
-		# @todo temp until table nav in place
-		/*
-		echo '<br class="clear" />';
-
-		// Display number of posts
-		# $count = count( $GLOBALS['wpdb']->last_result );
-		$count = count( $this->the_sql_results() );
-		printf( 
-			 _n(
-				 'One post linking to this post.'
-				,'Posts linking to this post: %s'
-				,$count
-				,$this->get_textdomain() 
-			 )
-			,zeroise( number_format_i18n( $count ), 2 )
-		);
-		*/
 	}
 
 
@@ -252,6 +248,7 @@ class ilcInit
 	 * SQL Query
 	 * Adds content to two class vars: The resulting array & the counter
 	 * 
+	 * @since 0.2
 	 * @return (object) $links 
 	 */
 	public function get_sql_results()
@@ -274,6 +271,7 @@ class ilcInit
 	/**
 	 * Wrapper to return the sql results for the admin table class
 	 * 
+	 * @since 0.2.7
 	 * @see WP_List_Table::prepare_items()
 	 * @return (array) $sql_results
 	 */
@@ -286,6 +284,7 @@ class ilcInit
 	/**
 	 * Builds the output
 	 * 
+	 * @since 0.2
 	 * @uses markup()
 	 * @return (string) $output
 	 */
@@ -330,6 +329,7 @@ class ilcInit
 	/**
 	 * Builds the markup
 	 * 
+	 * @since 0.2
 	 * @uses markup_filter()
 	 * @param (array) $results | SQL Query results ordered
 	 * @return (string) $output | Html markup
@@ -358,6 +358,7 @@ class ilcInit
 	 * Replaces markup placeholders
 	 * Deletes placeholders if the settings array contains an empty string
 	 * 
+	 * @since 0.2
 	 * @param (string) $input
 	 * @return (string) $markup
 	 */
@@ -386,6 +387,7 @@ class ilcInit
 	 * Displays an update message for plugin list screens.
 	 * Shows only the version updates from the current until the newest version
 	 * 
+	 * @since 0.2.8
 	 * @param (array) $plugin_data
 	 * @param (object) $r
 	 * @return (string) $output
