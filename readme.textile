@@ -1,6 +1,6 @@
 h2. Internal Link Checker
 
-version: _v0.4_
+**Version: _v0.4_**
 
 **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
