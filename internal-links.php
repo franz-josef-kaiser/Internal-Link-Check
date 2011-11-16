@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.3
+Version:		0.4
 Text Domain:	ilc
 License:		GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -229,6 +229,7 @@ class ilcInit
 		$table->display();
 
 		# @todo temp until table nav in place
+		/*
 		echo '<br class="clear" />';
 
 		// Display number of posts
@@ -243,6 +244,7 @@ class ilcInit
 			 )
 			,zeroise( number_format_i18n( $count ), 2 )
 		);
+		*/
 	}
 
 
@@ -257,13 +259,15 @@ class ilcInit
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
 		// SQL: newest first
-		return $GLOBALS['wpdb']->get_results( "
+		$sql_results = $GLOBALS['wpdb']->get_results( "
 			SELECT ID, post_title, post_date, post_content, post_type 
 			FROM {$GLOBALS['wpdb']->prefix}posts 
 			WHERE post_content 
 			LIKE '%{$current_link}%' 
 			ORDER BY post_date DESC
 		" );
+
+		return $sql_results;
 	}
 
 
@@ -275,7 +279,7 @@ class ilcInit
 	 */
 	public function the_sql_results()
 	{
-		return isset( $this->sql_results ) ? $this->sql_results : self::get_sql_results();
+		return isset( $this->sql_results ) ? $this->sql_results : self :: get_sql_results();
 	}
 
 

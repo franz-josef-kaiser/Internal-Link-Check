@@ -12,10 +12,16 @@ if( ! class_exists( 'WP' ) )
 
 /**
  * Extension for the WP core list table class
+ * 
+ * Renders the contents of the meta box
+ * 
  * @author FJ Kaiser
+ * 
  * @package ILC
  * @subpackage WP List Table extension
  * @license GNU GPL 2
+ * 
+ * @see /wp-admin/includes/class-wp-comments-list-table.php Comments List Table class.
  * @tutorial @link http://codex.wordpress.org/Class_Reference/WP_List_Table
  * @example @link http://wordpress.org/extend/plugins/custom-list-table-example
  */
@@ -46,8 +52,18 @@ class ilcTable extends WP_List_Table
 		parent :: __construct( array(
 			 'singular'	=> 'internal link'
 			,'plural'	=> 'internal links'
-			,'ajax'		=> false
+			,'ajax'		=> true
 		) );
+	}
+
+
+	/**
+	 * (non-PHPdoc)
+	 * @see WP_List_Table::ajax_user_can()
+	 */
+	function ajax_user_can() 
+	{
+		return current_user_can( 'edit_posts' );
 	}
 
 
@@ -99,7 +115,7 @@ class ilcTable extends WP_List_Table
 	{
 		$columns		= $this->get_columns();
 		$hidden			= array();
-		$sortable		= array(); # $this->get_sortable_columns();
+		$sortable		= $this->get_sortable_columns();
 
         $this->_column_headers = array( 
         	 $columns
@@ -107,10 +123,39 @@ class ilcTable extends WP_List_Table
         	,$sortable 
         );
 
-        $data			= ilcInit::the_sql_results();
+        // SQL results
+        $posts			= ilcInit :: the_sql_results();
+
+        # >>>> Pagination
+        // Per Page Data
+			$per_page		= 5;
+	        $current_page	= $this->get_pagenum();
+	        $total_items	= count( $posts );
+	        $this->set_pagination_args( array (
+	        	 // Calculate the total number of items
+	             'total_items'	=> $total_items
+	             // Determine how many items to show on a page
+	            ,'per_page'		=> $per_page
+	             // Calculate the total number of pages
+	            ,'total_pages'	=> ceil( $total_items / $per_page )
+	        ) );
+			// Setup first and last post index/key for current posts array filter
+	        $last_post		= $current_page * $per_page;
+	        // count one post up as we'd have null else
+	        $first_post		= $last_post - $per_page +1;
+	        // In case the last page doesn't hold as many objects as the other pages hold: set to last element
+	        if ( $last_post > $total_items )
+	        	$last_post = $total_items;
+	        // Setup the range of keys/indizes that contain the posts on the currently displayed page(d)
+	        // flip keys with values as the range outputs the range in the values
+	        $range			= array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
+	        // Filter out the posts we're not displaying on the current page
+	        $posts_array	= array_intersect_key( $posts, $range );
+        # <<<< Pagination
+
         // Prepare the data
         $permalink		= __( 'Edit:', $this->textdomain );
-		foreach ( $data as $key => $post )
+		foreach ( $posts_array as $key => $post )
 		{
 			$link		= get_edit_post_link( $post->ID );
 
@@ -118,29 +163,10 @@ class ilcTable extends WP_List_Table
 			$no_title	= __( 'No title set', $this->textdomain );
 			$title		= ! $post->post_title ? "<em>{$no_title}</em>" : $post->post_title;
 
-			$data[ $key ]->post_title = "<a title='{$permalink} {$title}' href='{$link}'>{$title}</a>";
+			$posts[ $key ]->post_title = "<a title='{$permalink} {$title}' href='{$link}'>{$title}</a>";
 		}
 
-        // Pagination Data
-        /*
-		$per_page		= 5;
-        $current_page	= $this->get_pagenum();
-        $total_items	= count( $data );
-        $this->set_pagination_args( array (
-        	 // Calculate the total number of items
-             'total_items'	=> $total_items
-             // Determine how many items to show on a page
-            ,'per_page'		=> $per_page
-             // Calculate the total number of pages
-            ,'total_pages'	=> ceil( $total_items / $per_page )
-        ) );
-        */
-
-        /*
-        $this->process_bulk_action();
-        */
-
-        $this->items	= $data;
+        $this->items	= $posts_array;
 	}
 
 
@@ -158,12 +184,27 @@ class ilcTable extends WP_List_Table
 
 
 	/**
-	 * Temp. Override of table nav to avoid gaps in UI
+	 * Override of table nav to avoid breaking with bulk actions & according nonce field
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::display_tablenav()
+	 * @access protected
 	 */
-	public function display_tablenav( $which )
-	{
-		return;
+	function display_tablenav( $which ) {
+		# if ( 'top' == $which )
+			# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+		?>
+		<div class="tablenav <?php echo esc_attr( $which ); ?>">
+			<!-- 
+			<div class="alignleft actions">
+				<?php # $this->bulk_actions( $which ); ?>
+			</div>
+			 -->
+			<?php
+			$this->extra_tablenav( $which );
+			$this->pagination( $which );
+			?>
+			<br class="clear" />
+		</div>
+		<?php
 	}
 }

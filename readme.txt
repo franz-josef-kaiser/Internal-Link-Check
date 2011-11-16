@@ -3,10 +3,10 @@ Plugin Name:		Internal Link Checker
 Plugin URI:			https://github.com/franz-josef-kaiser/Internal-Link-Check
 Author:				Franz Josef Kaiser, Patrick Matsumura
 Author URI:			https://plus.google.com/u/0/107110219316412982437
-Tags:				admin, link, links, meta, box, meta_box, missing, 404 
+Tags:				admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
 Requires at least:	3.1
 Tested up to:		3.3
-Stable tag:			0.3
+Stable tag:			0.4
 
 == Description ==
 = Internal Link Checker =
@@ -130,4 +130,7 @@ Check for remote readme file availibility before get file contents on update
 The meta box content filter disappeared and was replaced by an action to override the content
 
 = v0.3 =
-Final stable release with new WP Admin Tables class API in use. Typo & Language fixes, fully translated.
+Final stable release with new WP Admin Tables class API in use. Typo & Language fixes, fully translated
+
+= v0.4 =
+Now supports pagination for the meta box to take less space in the UI in cases where there are more than just a few links
