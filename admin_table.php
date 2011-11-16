@@ -15,11 +15,12 @@ if( ! class_exists( 'WP' ) )
  * 
  * Renders the contents of the meta box
  * 
- * @author FJ Kaiser
+ * @author Franz Josef Kaiser
  * 
  * @package ILC
  * @subpackage WP List Table extension
  * @license GNU GPL 2
+ * @since 0.2.7
  * 
  * @see /wp-admin/includes/class-wp-comments-list-table.php Comments List Table class.
  * @tutorial @link http://codex.wordpress.org/Class_Reference/WP_List_Table
@@ -127,6 +128,7 @@ class ilcTable extends WP_List_Table
         $posts			= ilcInit :: the_sql_results();
 
         # >>>> Pagination
+	 	# @since 0.4
         // Per Page Data
 			$per_page		= 5;
 	        $current_page	= $this->get_pagenum();
