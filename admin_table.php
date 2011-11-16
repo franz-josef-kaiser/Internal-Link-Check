@@ -13,6 +13,9 @@ if( ! class_exists( 'WP' ) )
 /**
  * Extension for the WP core list table class
  * @author FJ Kaiser
+ * @package ILC
+ * @subpackage WP List Table extension
+ * @license GNU GPL 2
  * @tutorial @link http://codex.wordpress.org/Class_Reference/WP_List_Table
  * @example @link http://wordpress.org/extend/plugins/custom-list-table-example
  */

@@ -4,7 +4,7 @@ Plugin URI:			https://github.com/franz-josef-kaiser/Internal-Link-Check
 Author:				Franz Josef Kaiser, Patrick Matsumura
 Author URI:			https://plus.google.com/u/0/107110219316412982437
 Tags:				admin, link, links, meta, box, meta_box, missing, 404 
-Requires at least:	0.x
+Requires at least:	3.1
 Tested up to:		3.3
 Stable tag:			0.3
 
@@ -55,6 +55,10 @@ If you want to help translating, please contact me on G+.
 
 Included:
 EN/DE (Patrick Matsumura)
+
+== Screenshots ==
+
+1. meta box in post edit admin UI screen
 
 == Changelog ==
 
@@ -127,7 +131,3 @@ The meta box content filter disappeared and was replaced by an action to overrid
 
 = v0.3 =
 Final stable release with new WP Admin Tables class API in use. Typo & Language fixes, fully translated.
-
-== Screenshots ==
-
-1. meta box in post edit admin UI screen

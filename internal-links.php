@@ -7,23 +7,23 @@ Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
 Version:		0.3
 Text Domain:	ilc
-License:		GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+License:		GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-	(c) Copyright 2010 - 2011 by Franz Josef Kaiser <mailto: office@unserkaiser.com>
+	(c) Copyright 2010 - 2011 by Franz Josef Kaiser <mailto: office (a) unserkaiser.com>
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
 // Secure: don't allow to load this file directly
@@ -45,9 +45,8 @@ if ( ! class_exists( 'ilcInit' ) )
 /**
  * Factory
  * @author Franz Josef Kaiser
- * 
- * translation tutorial
- * @link http://wordpress.stackexchange.com/questions/33312/how-to-translate-plural-forms-for-themes-plugins-with-poedit/33314#33314
+ * @license GNU GPL 2
+ * @package ILC
  */
 class ilcInit
 {
@@ -106,6 +105,7 @@ class ilcInit
 		if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
 
+		# @link http://wordpress.stackexchange.com/questions/33312/how-to-translate-plural-forms-for-themes-plugins-with-poedit/33314#33314 Translation Tutorial by the author
 		// l10n translation files
 		$dir		= basename( dirname( __FILE__ ) );
 		// in plugins directory
@@ -131,9 +131,9 @@ class ilcInit
 		if ( is_admin() )
 		{
 			global $pagenow;
+			// Better update message
 			if ( 'plugins.php' === $pagenow )
 			{
-				// Better update message
 				$file	= basename( __FILE__ );
 				$folder	= basename( dirname( __FILE__ ) );
 				$hook = "in_plugin_update_message-{$folder}/{$file}";
@@ -281,7 +281,6 @@ class ilcInit
 
 	/**
 	 * Builds the output
-	 * Also used as meta box callback function
 	 * 
 	 * @uses markup()
 	 * @return (string) $output
