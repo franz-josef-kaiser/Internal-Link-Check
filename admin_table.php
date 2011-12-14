@@ -30,31 +30,117 @@ class ilcTable extends WP_List_Table
 {
 	/**
 	 * l10n translation domain
+	 * Retrieved via init class
+	 * 
+	 * @since 0.2.7
 	 * @var (string)
 	 */
 	var $textdomain;
 
 
 	/**
+	 * Meta Box name
+	 * Retrieved via init class
+	 * 
+	 * @since 0.6
+	 * @var (string)
+	 */
+	var $meta_box_name;
+
+
+	/**
+	 * Order SQL results ASC/DESC
+	 * Set by $_GET (query arg)
+	 * 
+	 * @since 0.5
+	 * @var (string)
+	 */
+	var $order;
+
+
+	/**
+	 * Order SQL results by columns
+	 * Set by $_GET (query arg)
+	 * 
+	 * @since 0.5
+	 * @var (string)
+	 */
+	var $orderby;
+
+
+	/**
 	 * Constructor
 	 * 
+	 * @param (string) $textdomain 
+	 * @param (string) $meta_box_name
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct( $textdomain, $meta_box_name )
 	{
 		// textdomain
-		$trace				= debug_backtrace();
-		$plugin_data		= get_plugin_data( $trace[0]['file'] );
-		$this->textdomain	= $plugin_data['TextDomain'];
-		// screen
-		$screen				= get_current_screen();
-		$this->screen		= $screen->id;
+		$this->textdomain	= $textdomain;
+		// meta box name
+		$this->meta_box_name= $meta_box_name;
 
+		// screen
+		$this->set_screen();
+
+		// Args for the SQL query, based on query vars in $_GET
+		$this->set_order();
+		$this->set_orderby();
+
+		// Setup
 		parent :: __construct( array(
 			 'singular'	=> 'internal link'
 			,'plural'	=> 'internal links'
 			,'ajax'		=> true
 		) );
+
+		// Display Output
+		$this->prepare_items();
+		# echo '<form id="form-search-ilc">';
+		# $this->search_box( __( 'Search', $this->textdomain ), 'search-ilc' );
+		$this->display();
+		# echo '</form>';
+	}
+
+
+	/**
+	 * Sets the current screen name
+	 * @return void
+	 */
+	public function set_screen()
+	{
+		$screen			= get_current_screen();
+		$this->screen	= $screen->id;
+	}
+
+
+	/**
+	 * Sets the current order argument for the SQL Query
+	 * based on the $_GET array
+	 * @return void
+	 */
+	public function set_order()
+	{
+		$order = 'DESC';
+		if ( isset( $_GET['order'] ) AND $_GET['order'] )
+			$order = $_GET['order'];
+		$this->order = $order;
+	}
+
+
+	/**
+	 * Sets the current orderby argument for the SQL Query
+	 * based on the $_GET array
+	 * @return void
+	 */
+	public function set_orderby()
+	{
+		$orderby = 'post_date';
+		if ( isset( $_GET['orderby'] ) AND $_GET['orderby'] )
+			$orderby = $_GET['orderby'];
+		$this->orderby = $orderby;
 	}
 
 
@@ -80,6 +166,29 @@ class ilcTable extends WP_List_Table
 
 	/**
 	 * (non-PHPdoc)
+	 * @see WP_List_Table::get_views()
+	 */
+	public function get_views()
+	{
+		# Only needed if we're going to add bulk actions and
+		# want a @magic (idea) history tracking:
+		# "Where was/is this post linked"
+		# We should add some query vars to target the different views,
+		# that have run through some of the bulk actions
+		# Not sure how to target those posts: by adding some custom post_meta data maybe?
+		# @example: array( 'removed_link' => $post->ID )
+
+		// @example display
+		#foreach ( array( 'test', 'bla', 'foo', 'bar' ) as $e )
+		#	$example[] = "<a href='#'>{$e}</a>";
+		#return $example;
+
+		return array();
+	} 
+
+
+	/**
+	 * (non-PHPdoc)
 	 * @see WP_List_Table::get_columns()
 	 */
 	public function get_columns()
@@ -96,12 +205,12 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::get_sortable_columns()
 	 */
-	public function get_sortable_columns() 
+	public function get_sortable_columns()
 	{
 		return array(
-			 'ID'			=> 'ID'
-			,'post_title'	=> 'post_title'
-			,'post_date'	=> 'post_date'
+			 'ID'			=> array( 'ID', true )
+			,'post_title'	=> array( 'post_title', true )
+			,'post_date'	=> array( 'post_date', true )
 		);
 	}
 
@@ -208,5 +317,40 @@ class ilcTable extends WP_List_Table
 			<br class="clear" />
 		</div>
 		<?php
+	}
+
+
+	/**
+	 * Disables the views for 'side' context as there's not enough free space in the UI
+	 * Only displays them on screen/browser refresh. Else we'd have to do this via Ajax DB update.
+	 * 
+	 * @since 0.6
+	 * (non-PHPdoc)
+	 * @see WP_List_Table::extra_tablenav()
+	 */
+	public function extra_tablenav( $which )
+	{
+		// Abort for empty views array - needed during development, maybe later if settings are present
+		$views = $this->get_views();
+		if ( empty( $views ) )
+			return;
+
+		// Get all meta boxes
+		$curr_meta_boxes = $GLOBALS['wp_meta_boxes'][ $this->screen ];
+		// Loop through the context/priority array
+		foreach ( $curr_meta_boxes as $context => $priority )
+		{
+			foreach ( $priority as $name => $meta_boxes )
+			{
+				// Check if the link meta box is in the current priority
+				$link_box = in_array( $this->meta_box_name, array_keys( $meta_boxes ) );
+				// If so: abort
+				if ( $link_box AND 'side' === $context )
+					return;
+			}
+		}
+
+		// If we're not in the 'side' context, display the views
+		$this->views();
 	}
 }
