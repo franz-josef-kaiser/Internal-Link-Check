@@ -57,6 +57,7 @@ class ilcInit
 	 */
 	public static $dir;
 
+
 	/**
 	 * Relative Path from plugin root dir
 	 * 
@@ -64,6 +65,7 @@ class ilcInit
 	 * @var (string)
 	 */
 	public static $rel_path;
+
 
 	/**
 	 * Used for update notices
@@ -73,6 +75,7 @@ class ilcInit
 	 * @var (string)
 	 */
 	public $remote_readme = 'http://plugins.trac.wordpress.org/browser/internal-link-checker/trunk/readme.txt?format=txt';
+
 
 	/**
 	 * Settings
@@ -89,6 +92,7 @@ class ilcInit
 		,'nofollow'			=> false
 		,'echo'				=> true
 	);
+
 
 	/**
 	 * Container for SQL result
