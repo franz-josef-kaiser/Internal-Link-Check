@@ -5,7 +5,7 @@ Plugin URI:		https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description:	Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:			Franz Josef Kaiser, Patrick Matsumura
 Author URI: 	https://plus.google.com/u/0/107110219316412982437
-Version:		0.4.1
+Version:		0.5.1
 Text Domain:	ilc
 License:		GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -36,11 +36,10 @@ if( ! class_exists( 'WP' ) )
 
 
 
-// init class
-add_action( 'init', array( 'ilcInit', 'init' ) );
-
 if ( ! class_exists( 'ilcInit' ) )
 {
+	// init class
+	add_action( 'admin_init', array( 'ilcInit', 'init' ), 0 );
 
 /**
  * Factory
@@ -92,12 +91,24 @@ class ilcInit
 	);
 
 	/**
-	 * Container for sql result
+	 * Container for SQL result
 	 * 
 	 * @since 0.2
 	 * @var (array)
 	 */
 	public $sql_results;
+
+
+	/**
+	 * Sets the meta box name
+	 * Used to determin in the extended WP_List_Table class
+	 * in which context the meta box is. 
+	 * Needed to determine if the whole UI should be shown
+	 * 
+	 * @since 0.6
+	 * @var unknown_type
+	 */
+	var $meta_box_name = 'link-check';
 
 
 	/**
@@ -115,15 +126,8 @@ class ilcInit
 		if ( empty ( $GLOBALS[ $class ] ) )
 			$GLOBALS[ $class ] = new $class;
 
-	 	# @since 0.2.2
-		# @link http://wordpress.stackexchange.com/questions/33312/how-to-translate-plural-forms-for-themes-plugins-with-poedit/33314#33314 Translation Tutorial by the author
-		// l10n translation files
-		$dir		= basename( dirname( __FILE__ ) );
-		// in plugins directory
-		$l10n_file	= load_plugin_textdomain( 'ilc', false, "{$dir}/lang" );
-		// in mu-plugins directory
-		if ( ! $l10n_file )
-			load_muplugin_textdomain( 'ilc', "{$dir}/lang" );
+		// Load translation file
+		add_action( 'admin_init', array( __CLASS__, 'load_textdomain' ) );
 	}
 
 
@@ -161,6 +165,24 @@ class ilcInit
 		}
 	}
 
+	/**
+	 * Load plugin translation
+	 *
+	 * @link http://wordpress.stackexchange.com/a/33314 Translation Tutorial by the author
+	 * @return void
+	 */
+	static function load_textdomain() 
+	{
+		// l18n translation files
+		$dir       = basename( RWMB_DIR );
+		$dir       = "{$dir}/lang";
+		$domain    = self :: get_textdomain();
+		$l18n_file = "{$dir}/{$domain}-{$GLOBALS['locale']}.mo";
+
+		// in themes/plugins/mu-plugins directory
+		load_textdomain( $domain, $l18n_file );
+	}
+
 
 	/**
 	 * Extension/File/Class loader
@@ -170,7 +192,11 @@ class ilcInit
 	 */
 	public function load_extensions()
 	{
-		foreach ( array( 'admin_table' ) as $extension )
+		$files = array( 
+			 'admin_table' 
+		);
+
+		foreach ( $files as $extension )
 		{
 			$file = "{$this->dir}/{$extension}.php";
 			if ( is_readable( $file ) )
@@ -185,12 +211,12 @@ class ilcInit
 	 * @since 0.2.8
 	 * @uses   get_plugin_data
 	 * @param (string) $value | default = 'Version'; Valid: see Header Comment Block
-	 * @return (string) 
+	 * @return (string) $data
 	 */
-	private function get_plugin_data( $value = 'Version' ) 
+	static private function get_plugin_data( $value = 'Version', $mark_up = true ) 
 	{
-		$plugin_data = get_plugin_data( __FILE__ );
-		return $plugin_data[ $value ];
+		$data = get_plugin_data( __FILE__, $mark_up );
+		return $data[ $value ];
 	}
 
 
@@ -200,9 +226,46 @@ class ilcInit
 	 * @since 0.2.8
 	 * @return (string) $textdomain
 	 */
-	public function get_textdomain() 
+	static public function get_textdomain() 
 	{
-		return $this->get_plugin_data( 'TextDomain' );
+		return self :: get_plugin_data( 'TextDomain', false );
+	}
+
+
+	/**
+	 * SQL Query
+	 * Adds content to two class vars: The resulting array & the counter
+	 * 
+	 * @since 0.2
+	 * @return (object) $links 
+	 */
+	public function get_sql_results()
+	{
+		// get_permalink() cares about rewrite rules
+		$current_link = get_permalink( $GLOBALS['post']->ID );
+		// SQL: newest first
+		$sql_results = $GLOBALS['wpdb']->get_results( "
+			SELECT ID, post_title, post_date, post_content, post_type 
+			FROM {$GLOBALS['wpdb']->prefix}posts 
+			WHERE post_content 
+			LIKE '%{$current_link}%' 
+			ORDER BY {$this->orderby} {$this->order}
+		" );
+
+		return $sql_results;
+	}
+
+
+	/**
+	 * Wrapper to return the sql results for the admin table class
+	 * 
+	 * @since 0.2.7
+	 * @see WP_List_Table::prepare_items()
+	 * @return (array) $sql_results
+	 */
+	public function the_sql_results()
+	{
+		return isset( $this->sql_results ) ? $this->sql_results : self :: get_sql_results();
 	}
 
 	
@@ -216,7 +279,7 @@ class ilcInit
 	{
 		// add meta box
 		add_meta_box( 
-			 'link-check'
+			 $this->meta_box_name
 			,__( 'Internal Links', $this->get_textdomain() )
 			,array( &$this, 'load_table' )
 			,'post' 
@@ -238,46 +301,7 @@ class ilcInit
 			return do_action( 'internal_links_meta_box', $this->the_sql_results() );
 
 		// Display table
-		$table = new ilcTable();
-		$table->prepare_items();
-		$table->display();
-	}
-
-
-	/**
-	 * SQL Query
-	 * Adds content to two class vars: The resulting array & the counter
-	 * 
-	 * @since 0.2
-	 * @return (object) $links 
-	 */
-	public function get_sql_results()
-	{
-		// get_permalink() cares about rewrite rules
-		$current_link = get_permalink( $GLOBALS['post']->ID );
-		// SQL: newest first
-		$sql_results = $GLOBALS['wpdb']->get_results( "
-			SELECT ID, post_title, post_date, post_content, post_type 
-			FROM {$GLOBALS['wpdb']->prefix}posts 
-			WHERE post_content 
-			LIKE '%{$current_link}%' 
-			ORDER BY post_date DESC
-		" );
-
-		return $sql_results;
-	}
-
-
-	/**
-	 * Wrapper to return the sql results for the admin table class
-	 * 
-	 * @since 0.2.7
-	 * @see WP_List_Table::prepare_items()
-	 * @return (array) $sql_results
-	 */
-	public function the_sql_results()
-	{
-		return isset( $this->sql_results ) ? $this->sql_results : self :: get_sql_results();
+		$table = new ilcTable( $this->get_textdomain(), $this->meta_box_name );
 	}
 
 

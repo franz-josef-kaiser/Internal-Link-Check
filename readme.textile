@@ -1,8 +1,8 @@
 h2. Internal Link Checker
 
-**Version: _v0.4_**
+**Version: _v0.5_**
 
-**Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
+> **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
 Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box - **just activate**!
 
@@ -52,8 +52,8 @@ EN/DE ("Patrick Matsumura":https://github.com/patrickmatsumura)
 
 h4. Authors
 
-"Franz Josef Kaiser":https://github.com/franz-josef-kaiser | "G+":https://plus.google.com/u/0/107110219316412982437
-"Patrick Matsumura":https://github.com/patrickmatsumura | "G+":https://plus.google.com/u/0/110601372184256601089
+visit "Franz Josef Kaiser":https://github.com/franz-josef-kaiser at github | or get social at "G+":https://plus.google.com/u/0/107110219316412982437
+visit "Patrick Matsumura":https://github.com/patrickmatsumura at github | or get social at "G+":https://plus.google.com/u/0/110601372184256601089
 
 ----------------------------------------------------------------
 
@@ -82,3 +82,5 @@ h4. Changelog
 * _v0.2.9_ Moved from a filter for the meta box to an action to override the output of the meta box content
 * _v0.3_ Language & Typo fixes. Final, stable 0.3 release.
 * _v0.4_ Now supports pagination for the meta box to take less space in the UI in cases where there are more than just a few links
+* _v0.5_ Now supports sorting by column
+* _v0.5.1_ Separate textdomain function

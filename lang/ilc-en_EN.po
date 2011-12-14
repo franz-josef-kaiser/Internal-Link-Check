@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-14 19:29+0100\n"
-"PO-Revision-Date: 2011-11-14 19:29+0100\n"
+"POT-Creation-Date: 2011-12-09 01:26+0100\n"
+"PO-Revision-Date: 2011-12-09 01:26+0100\n"
 "Last-Translator: Franz Josef Kaiser <franzjosef@unserkaiser.at>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,52 +16,45 @@ msgstr ""
 "X-Poedit-Country: UNITED STATES\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../admin_table.php:57
+#: ../admin_table.php:163
 msgid "No links found."
 msgstr ""
 
-#: ../admin_table.php:68
+#: ../admin_table.php:197
 msgid "ID"
 msgstr ""
 
-#: ../admin_table.php:69
+#: ../admin_table.php:198
 msgid "Title"
 msgstr ""
 
-#: ../admin_table.php:70
+#: ../admin_table.php:199
 msgid "Date"
 msgstr ""
 
-#: ../admin_table.php:109
+#: ../admin_table.php:268
 msgid "Edit:"
 msgstr ""
 
-#: ../admin_table.php:115
-#: ../internal-links.php:301
+#: ../admin_table.php:274
+#: ../internal-links.php:314
 msgid "No title set"
 msgstr ""
 
-#: ../internal-links.php:204
+#: ../internal-links.php:270
 msgid "Internal Links"
 msgstr ""
 
-#: ../internal-links.php:239
-#, php-format
-msgid "One post linking to this post."
-msgid_plural "Posts linking to this post: %s"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../internal-links.php:292
+#: ../internal-links.php:305
 msgid "No posts are linking to this post."
 msgstr ""
 
-#: ../internal-links.php:406
+#: ../internal-links.php:422
 #, php-format
 msgid "The Update from %1$s to %2$s brings you the following new features, bug fixes and additions."
 msgstr ""
 
-#: ../internal-links.php:413
+#: ../internal-links.php:429
 #, php-format
 msgid "You can also check the nightly builds of %1$sour development repository%2$s on GitHub. If you got ideas, feature request or want to help with pull requests, please feel free to do so on GitHub.%3$s"
 msgstr ""
