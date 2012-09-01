@@ -1,12 +1,12 @@
 === Plugin Name ===
 Plugin Name:		Internal Link Checker
-Plugin URI:			https://github.com/franz-josef-kaiser/Internal-Link-Check
+Plugin URI:			http://unserkaiser.com/plugins/internal-link-checker/
 Author:				Franz Josef Kaiser, Patrick Matsumura
-Author URI:			https://plus.google.com/u/0/107110219316412982437
+Author URI:			http://unserkaiser.com/
 Tags:				admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
 Requires at least:	3.1
-Tested up to:		3.3
-Stable tag:			0.5
+Tested up to:		3.4
+Stable tag:			0.6
 
 == Description ==
 = Internal Link Checker =

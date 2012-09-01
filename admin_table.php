@@ -82,11 +82,14 @@ class ilcTable extends WP_List_Table
 
 		// Display Output
 		$this->prepare_items();
+<<<<<<< HEAD
 
 		# echo '<form id="form-search-ilc">';
 		# $this->search_box( __( 'Search', 'ilc' ), 'search-ilc' );
 		$this->display();
 		# echo '</form>';
+=======
+>>>>>>> 1997bd9992f1431ef39518cbdeaea445c0463c26
 	}
 
 
