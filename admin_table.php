@@ -1,12 +1,6 @@
 <?php
 // Secure: don't allow to load this file directly
-if( ! class_exists( 'WP' ) ) 
-{
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
-
+! defined( 'ABSPATH' ) AND exit;
 
 
 
@@ -29,58 +23,48 @@ if( ! class_exists( 'WP' ) )
 class ilcTable extends WP_List_Table
 {
 	/**
-	 * l10n translation domain
-	 * Retrieved via init class
-	 * 
-	 * @since 0.2.7
-	 * @var (string)
-	 */
-	var $textdomain;
-
-
-	/**
 	 * Meta Box name
 	 * Retrieved via init class
 	 * 
-	 * @since 0.6
-	 * @var (string)
+	 * @since  0.6
+	 * @access public
+	 * @var    string
 	 */
-	var $meta_box_name;
+	public $meta_box_name;
 
 
 	/**
 	 * Order SQL results ASC/DESC
 	 * Set by $_GET (query arg)
 	 * 
-	 * @since 0.5
-	 * @var (string)
+	 * @since  0.5
+	 * @access public
+	 * @var    string
 	 */
-	var $order;
+	public $order;
 
 
 	/**
 	 * Order SQL results by columns
 	 * Set by $_GET (query arg)
 	 * 
-	 * @since 0.5
-	 * @var (string)
+	 * @since  0.5
+	 * @access public
+	 * @var    string
 	 */
-	var $orderby;
+	public $orderby;
 
 
 	/**
 	 * Constructor
 	 * 
-	 * @param (string) $textdomain 
-	 * @param (string) $meta_box_name
+	 * @param  string $meta_box_name
 	 * @return void
 	 */
-	public function __construct( $textdomain, $meta_box_name )
+	public function __construct( $meta_box_name )
 	{
-		// textdomain
-		$this->textdomain	= $textdomain;
 		// meta box name
-		$this->meta_box_name= $meta_box_name;
+		$this->meta_box_name = $meta_box_name;
 
 		// screen
 		$this->set_screen();
@@ -91,15 +75,16 @@ class ilcTable extends WP_List_Table
 
 		// Setup
 		parent :: __construct( array(
-			 'singular'	=> 'internal link'
-			,'plural'	=> 'internal links'
-			,'ajax'		=> true
+			 'singular' => 'internal link'
+			,'plural'   => 'internal links'
+			,'ajax'     => true
 		) );
 
 		// Display Output
 		$this->prepare_items();
+
 		# echo '<form id="form-search-ilc">';
-		# $this->search_box( __( 'Search', $this->textdomain ), 'search-ilc' );
+		# $this->search_box( __( 'Search', 'ilc' ), 'search-ilc' );
 		$this->display();
 		# echo '</form>';
 	}
@@ -107,18 +92,19 @@ class ilcTable extends WP_List_Table
 
 	/**
 	 * Sets the current screen name
+	 * 
 	 * @return void
 	 */
 	public function set_screen()
 	{
-		$screen			= get_current_screen();
-		$this->screen	= $screen->id;
+		$this->screen = get_current_screen()->id;
 	}
 
 
 	/**
 	 * Sets the current order argument for the SQL Query
 	 * based on the $_GET array
+	 * 
 	 * @return void
 	 */
 	public function set_order()
@@ -133,6 +119,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Sets the current orderby argument for the SQL Query
 	 * based on the $_GET array
+	 * 
 	 * @return void
 	 */
 	public function set_orderby()
@@ -148,7 +135,7 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::ajax_user_can()
 	 */
-	function ajax_user_can() 
+	public function ajax_user_can() 
 	{
 		return current_user_can( 'edit_posts' );
 	}
@@ -160,7 +147,7 @@ class ilcTable extends WP_List_Table
 	 */
 	public function no_items() 
 	{
-		_e( 'No links found.', $this->textdomain );
+		_e( 'No links found.', 'ilc' );
 	}
 
 
@@ -194,9 +181,9 @@ class ilcTable extends WP_List_Table
 	public function get_columns()
 	{
 		return array(
-			 'ID'			=> __( 'ID',	$this->textdomain )
-			,'post_title'	=> __( 'Title',	$this->textdomain )
-			,'post_date'	=> __( 'Date',	$this->textdomain )
+			 'ID'         => __( 'ID', 'ilc' )
+			,'post_title' => __( 'Title', 'ilc' )
+			,'post_date'  => __( 'Date', 'ilc' )
 		);
 	}
 
@@ -208,9 +195,9 @@ class ilcTable extends WP_List_Table
 	public function get_sortable_columns()
 	{
 		return array(
-			 'ID'			=> array( 'ID', true )
-			,'post_title'	=> array( 'post_title', true )
-			,'post_date'	=> array( 'post_date', true )
+			 'ID'         => array( 'ID', true )
+			,'post_title' => array( 'post_title', true )
+			,'post_date'  => array( 'post_date', true )
 		);
 	}
 
@@ -223,9 +210,9 @@ class ilcTable extends WP_List_Table
 	 */
 	public function prepare_items()
 	{
-		$columns		= $this->get_columns();
-		$hidden			= array();
-		$sortable		= $this->get_sortable_columns();
+		$columns  = $this->get_columns();
+		$hidden   = array();
+		$sortable = $this->get_sortable_columns();
 
         $this->_column_headers = array( 
         	 $columns
@@ -234,50 +221,54 @@ class ilcTable extends WP_List_Table
         );
 
         // SQL results
-        $posts			= ilcInit :: the_sql_results();
+        $posts = ilcInit :: the_sql_results();
+		empty( $posts ) AND $posts = array();
 
         # >>>> Pagination
 	 	# @since 0.4
         // Per Page Data
-			$per_page		= 5;
-	        $current_page	= $this->get_pagenum();
-	        $total_items	= count( $posts );
-	        $this->set_pagination_args( array (
-	        	 // Calculate the total number of items
-	             'total_items'	=> $total_items
-	             // Determine how many items to show on a page
-	            ,'per_page'		=> $per_page
-	             // Calculate the total number of pages
-	            ,'total_pages'	=> ceil( $total_items / $per_page )
-	        ) );
-			// Setup first and last post index/key for current posts array filter
-	        $last_post		= $current_page * $per_page;
-	        // count one post up as we'd have null else
-	        $first_post		= $last_post - $per_page +1;
-	        // In case the last page doesn't hold as many objects as the other pages hold: set to last element
-	        if ( $last_post > $total_items )
-	        	$last_post = $total_items;
-	        // Setup the range of keys/indizes that contain the posts on the currently displayed page(d)
-	        // flip keys with values as the range outputs the range in the values
-	        $range			= array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
-	        // Filter out the posts we're not displaying on the current page
-	        $posts_array	= array_intersect_key( $posts, $range );
+		$per_page     = 5;
+        $current_page = $this->get_pagenum();
+        $total_items  = count( $posts );
+        $this->set_pagination_args( array (
+        	 // Calculate the total number of items
+             'total_items' => $total_items
+             // Determine how many items to show on a page
+            ,'per_page'    => $per_page
+             // Calculate the total number of pages
+            ,'total_pages' => ceil( $total_items / $per_page )
+        ) );
+
+		// Setup first and last post index/key for current posts array filter.
+        $last_post = $current_page * $per_page;
+        // In case the last page doesn't hold as many objects,
+        // as the other pages hold: set to last element.
+        $last_post > $total_items AND $last_post = $total_items;
+        // count one post up as we'd have null else
+        $first_post = $last_post - $per_page +1;
+
+        // Setup the range of keys/indizes that contain 
+        // the posts on the currently displayed page(d).
+        // Flip keys with values as the range outputs the range in the values.
+        $range = array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
+
+        // Filter out the posts we're not displaying on the current page.
+        $posts_array = array_intersect_key( $posts, $range );
         # <<<< Pagination
 
         // Prepare the data
-        $permalink		= __( 'Edit:', $this->textdomain );
+        $permalink = __( 'Edit:', 'ilc' );
 		foreach ( $posts_array as $key => $post )
 		{
-			$link		= get_edit_post_link( $post->ID );
-
+			$link     = get_edit_post_link( $post->ID );
 			// If no title was set: we care about it
-			$no_title	= __( 'No title set', $this->textdomain );
-			$title		= ! $post->post_title ? "<em>{$no_title}</em>" : $post->post_title;
+			$no_title = __( 'No title set', 'ilc' );
+			$title    = ! $post->post_title ? "<em>{$no_title}</em>" : $post->post_title;
 
 			$posts[ $key ]->post_title = "<a title='{$permalink} {$title}' href='{$link}'>{$title}</a>";
 		}
 
-        $this->items	= $posts_array;
+        $this->items = $posts_array;
 	}
 
 
@@ -285,8 +276,9 @@ class ilcTable extends WP_List_Table
 	 * A single column
 	 * Must get defined in extended class here
 	 * 
-	 * @param (object) $item
-	 * @param (string) $column_name
+	 * @param  object $item
+	 * @param  string $column_name
+	 * @return string $item->column_name
 	 */
 	public function column_default( $item, $column_name )
 	{
@@ -298,9 +290,10 @@ class ilcTable extends WP_List_Table
 	 * Override of table nav to avoid breaking with bulk actions & according nonce field
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::display_tablenav()
-	 * @access protected
+	 * @access public
+	 * @return string HTML
 	 */
-	function display_tablenav( $which ) {
+	public  function display_tablenav( $which ) {
 		# if ( 'top' == $which )
 			# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
 		?>
@@ -322,7 +315,7 @@ class ilcTable extends WP_List_Table
 
 	/**
 	 * Disables the views for 'side' context as there's not enough free space in the UI
-	 * Only displays them on screen/browser refresh. Else we'd have to do this via Ajax DB update.
+	 * Only displays them on screen/browser refresh. Else we'd have to do this via an AJAX DB update.
 	 * 
 	 * @since 0.6
 	 * (non-PHPdoc)
@@ -344,7 +337,7 @@ class ilcTable extends WP_List_Table
 			{
 				// Check if the link meta box is in the current priority
 				$link_box = in_array( $this->meta_box_name, array_keys( $meta_boxes ) );
-				// If so: abort
+				// If so: Abort
 				if ( $link_box AND 'side' === $context )
 					return;
 			}

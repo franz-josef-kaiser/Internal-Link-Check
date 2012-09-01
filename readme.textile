@@ -59,28 +59,32 @@ visit "Patrick Matsumura":https://github.com/patrickmatsumura at github | or get
 
 h4. Changelog
 
-* _v0.1_ First version
-* _v0.1.1_ Should now work with post titles & post slugs/names
-* _v0.1.2_ Meta box content now displays inside an unordered list
-* _v0.1.2_ Added screenshot, readme.txt for wp.org repo & fixed not echoing that there are no links
-* _v0.1.3_ Minor fixes
-* _v0.2_ Moved to a class, added translation files loading fn.
-* _v0.2.1_ Minor fixes, added translation - props patrickmatsumura (see authors file)
-* _v0.2.2_ Added authors file, added check for unique links
-* _v0.2.4_ Added markup & markup filter functions and a initial settings array for further extension
-* _v0.2.5_ Added auto-correction for li elements & container
-* _v0.2.6_ Added singular/plural translation strings. Grouped results by post type column.
+* _v0.1_     First version
+* _v0.1.1_   Should now work with post titles & post slugs/names
+* _v0.1.2_   Meta box content now displays inside an unordered list
+* _v0.1.2_   Added screenshot, readme.txt for wp.org repo & fixed not echoing that there are no links
+* _v0.1.3_   Minor fixes
+* _v0.2_     Moved to a class, added translation files loading fn.
+* _v0.2.1_   Minor fixes, added translation - props patrickmatsumura (see authors file)
+* _v0.2.2_   Added authors file, added check for unique links
+* _v0.2.4_   Added markup & markup filter functions and a initial settings array for further extension
+* _v0.2.5_   Added auto-correction for li elements & container
+* _v0.2.6_   Added singular/plural translation strings. Grouped results by post type column.
 * _v0.2.6.1_ Reworked translation files.
 * _v0.2.6.2_ Avoids loading on every $_REQUEST. Now only loads on post.php in admin (post/page/cpt new/edit) screens
 * _v0.2.6.3_ Added mu-plugins directory for l10n lang files loading.
 * _v0.2.6.4_ Changed meta box title to "Internal Links" to not have long titles in screen options tab.
 * _v0.2.6.5_ Added wrapper function to call plugin data
 * _v0.2.6.6_ Moved Text Domain to plugin header comment for easier maintainance and transparency 
-* _v0.2.7_ Added native WP admin UI table to the meta box 
+* _v0.2.7_   Added native WP admin UI table to the meta box 
 * _v0.2.7.1_ Moved to admin edit post permalinks 
-* _v0.2.8_ Added better update messages for plugin list screen
-* _v0.2.9_ Moved from a filter for the meta box to an action to override the output of the meta box content
-* _v0.3_ Language & Typo fixes. Final, stable 0.3 release.
-* _v0.4_ Now supports pagination for the meta box to take less space in the UI in cases where there are more than just a few links
-* _v0.5_ Now supports sorting by column
-* _v0.5.1_ Separate textdomain function
+* _v0.2.8_   Added better update messages for plugin list screen
+* _v0.2.9_   Moved from a filter for the meta box to an action to override the output of the meta box content
+* _v0.3_     Language & Typo fixes. Final, stable 0.3 release.
+* _v0.4_     Now supports pagination for the meta box to take less space in the UI in cases where there are more than just a few links
+* _v0.5_     Now supports sorting by column
+* _v0.5.1_   Separate textdomain function
+* _v0.5.2_   Prepared SQL
+* _v0.5.3_   Alignment for code in repo
+* _v0.5.4_   Empty posts fix
+* _v0.6_     Major improvements in code length

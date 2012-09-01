@@ -142,3 +142,15 @@ Now supports sorting by column
 
 = v0.5.1 =
 Separate textdomain function
+
+= v0.5.2 =
+Prepare SQL
+
+= v0.5.3 =
+Code styling
+
+= v0.5.4 =
+Empty posts fix
+
+= v0.6 =
+Major improvements in code length
