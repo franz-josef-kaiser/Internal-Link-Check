@@ -66,9 +66,6 @@ class ilcTable extends WP_List_Table
 		// meta box name
 		$this->meta_box_name = $meta_box_name;
 
-		// screen
-		$this->set_screen();
-
 		// Args for the SQL query, based on query vars in $_GET
 		$this->set_order();
 		$this->set_orderby();
@@ -87,17 +84,6 @@ class ilcTable extends WP_List_Table
 		# $this->search_box( __( 'Search', 'ilc' ), 'search-ilc' );
 		$this->display();
 		# echo '</form>';
-	}
-
-
-	/**
-	 * Sets the current screen name
-	 * 
-	 * @return void
-	 */
-	public function set_screen()
-	{
-		$this->screen = get_current_screen()->id;
 	}
 
 
@@ -323,15 +309,15 @@ class ilcTable extends WP_List_Table
 	 */
 	public function extra_tablenav( $which )
 	{
+		global $wp_meta_boxes;
+
 		// Abort for empty views array - needed during development, maybe later if settings are present
 		$views = $this->get_views();
 		if ( empty( $views ) )
 			return;
 
-		// Get all meta boxes
-		$curr_meta_boxes = $GLOBALS['wp_meta_boxes'][ $this->screen ];
 		// Loop through the context/priority array
-		foreach ( $curr_meta_boxes as $context => $priority )
+		foreach ( $wp_meta_boxes[ get_current_screen()->id ] as $context => $priority )
 		{
 			foreach ( $priority as $name => $meta_boxes )
 			{

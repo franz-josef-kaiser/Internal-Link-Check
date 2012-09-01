@@ -6,7 +6,7 @@ Plugin URI:  https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description: Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
 Author:      Franz Josef Kaiser, Patrick Matsumura
 Author URI:  https://unserkaiser.com
-Version:     0.6
+Version:     0.6.1
 Text Domain: ilc
 License:     GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 

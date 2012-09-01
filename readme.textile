@@ -88,3 +88,4 @@ h4. Changelog
 * _v0.5.3_   Alignment for code in repo
 * _v0.5.4_   Empty posts fix
 * _v0.6_     Major improvements in code length
+* _v0.6.1_   Shortened admin table class

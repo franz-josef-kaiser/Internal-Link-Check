@@ -154,3 +154,6 @@ Empty posts fix
 
 = v0.6 =
 Major improvements in code length
+
+= v0.6.1 =
+Shortened admin table class
