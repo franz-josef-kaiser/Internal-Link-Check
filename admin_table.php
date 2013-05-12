@@ -166,11 +166,12 @@ class ilcTable extends WP_List_Table
 	 */
 	public function get_columns()
 	{
-		return array(
+		$columns = array(
 			 'ID'         => __( 'ID', 'ilc' )
 			,'post_title' => __( 'Title', 'ilc' )
 			,'post_date'  => __( 'Date', 'ilc' )
 		);
+		return apply_filters( 'ilc_table_columns', $columns );		
 	}
 
 
@@ -180,11 +181,12 @@ class ilcTable extends WP_List_Table
 	 */
 	public function get_sortable_columns()
 	{
-		return array(
+		$sortable = array(
 			 'ID'         => array( 'ID', true )
 			,'post_title' => array( 'post_title', true )
 			,'post_date'  => array( 'post_date', true )
 		);
+		return apply_filters( 'ilc_sortable_columns', $sortable );
 	}
 
 
@@ -213,7 +215,7 @@ class ilcTable extends WP_List_Table
         # >>>> Pagination
 	 	# @since 0.4
         // Per Page Data
-		$per_page     = 5;
+		$per_page     = apply_filters( 'ilc_per_page', 5 );
         $current_page = $this->get_pagenum();
         $total_items  = count( $posts );
         $this->set_pagination_args( array (
@@ -227,11 +229,11 @@ class ilcTable extends WP_List_Table
 
 		// Setup first and last post index/key for current posts array filter.
         $last_post = $current_page * $per_page;
+        // count one post up as we'd have null else, do it before updating last_post
+        $first_post = $last_post - $per_page +1;
         // In case the last page doesn't hold as many objects,
         // as the other pages hold: set to last element.
         $last_post > $total_items AND $last_post = $total_items;
-        // count one post up as we'd have null else
-        $first_post = $last_post - $per_page +1;
 
         // Setup the range of keys/indizes that contain 
         // the posts on the currently displayed page(d).

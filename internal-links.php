@@ -229,18 +229,18 @@ class ilcInit
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
 		// SQL: newest first
-		$sql_results = $wpdb->get_results( 
+		// TODO: put order and orderby as arguments for prepare()
+		$sql_results = $wpdb->get_results(
 			 $wpdb->prepare( "
 				SELECT ID, post_title, post_date, post_content, post_type 
-					FROM %s
+					FROM $wpdb->posts
 				WHERE post_content 
 					LIKE %s
-				ORDER BY %s %s
-			 " )
-			,"{$wpdb->prefix}posts"
-			,'%'.like_escape( $current_link ).'%'
-			,$this->orderby
-			,$this->order
+				AND post_status = 'publish'
+				ORDER BY $this->orderby $this->order
+				 " 
+				,'%' . like_escape( $current_link ) . '%'
+			)
 		);
 
 		return $sql_results;
@@ -268,12 +268,14 @@ class ilcInit
 	 */
 	public function add_meta_box()
 	{
-		add_meta_box( 
-			 $this->meta_box_name
-			,__( 'Internal Links', 'ilc' )
-			,array( $this, 'load_table' )
-			,'post' 
-		);
+		$post_types = apply_filters( 'ilc_post_types', array( 'post' ) );
+		foreach( $post_types as $cpt )
+			add_meta_box( 
+				 $this->meta_box_name
+				,__( 'Internal Links', 'ilc' )
+				,array( $this, 'load_table' )
+				,$cpt
+			);
 	}
 
 
