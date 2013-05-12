@@ -8,6 +8,8 @@ Requires at least:	3.1
 Tested up to:		3.4
 Stable tag:			0.6
 
+Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post.
+
 == Description ==
 = Internal Link Checker =
 
