@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-25 13:58+0100\n"
-"PO-Revision-Date: 2013-05-25 13:58+0100\n"
+"POT-Creation-Date: 2013-05-25 22:53+0100\n"
+"PO-Revision-Date: 2013-05-25 22:53+0100\n"
 "Last-Translator: Rodolfo Buaiz <brasofilo@gmai.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -37,26 +37,26 @@ msgstr ""
 msgid "Edit:"
 msgstr ""
 
-#: ../admin_table.php:253 ../internal-links.php:319
+#: ../admin_table.php:253 ../internal-links.php:322
 msgid "No title set"
 msgstr ""
 
-#: ../internal-links.php:275
+#: ../internal-links.php:278
 msgid "Internal Links"
 msgstr ""
 
-#: ../internal-links.php:310
+#: ../internal-links.php:313
 msgid "No posts are linking to this post."
 msgstr ""
 
-#: ../internal-links.php:430
+#: ../internal-links.php:433
 #, php-format
 msgid ""
 "The Update from %1$s to %2$s brings you the following new features, bug "
 "fixes and additions."
 msgstr ""
 
-#: ../internal-links.php:438
+#: ../internal-links.php:441
 #, php-format
 msgid ""
 "You can also check the nightly builds of %1$sour development repository%2$s "

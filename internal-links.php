@@ -229,10 +229,13 @@ class ilcInit
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
 		
+		$args = array( 'ID', 'post_title', 'post_date', 'post_content', 'post_type' );
+		$sql_select = implode( ', ', apply_filters( 'internal_links_master_filter', $args, 'sql' ) );
+		
 		// SQL: newest first
 		$sql_results = $wpdb->get_results(
 			 $wpdb->prepare( "
-				SELECT ID, post_title, post_date, post_content, post_type 
+				SELECT $sql_select
 					FROM $wpdb->posts
 				WHERE post_content 
 					LIKE %s
@@ -268,7 +271,7 @@ class ilcInit
 	 */
 	public function add_meta_box()
 	{
-		$post_types = apply_filters( 'internal_links_post_types', array( 'post' ) );
+		$post_types = apply_filters( 'internal_links_master_filter', array( 'post' ), 'metabox' );
 		foreach( $post_types as $cpt )
 			add_meta_box( 
 				 $this->meta_box_name

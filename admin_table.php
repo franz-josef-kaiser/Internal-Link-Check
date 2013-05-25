@@ -171,7 +171,7 @@ class ilcTable extends WP_List_Table
 			,'post_title' => __( 'Title', 'ilc' )
 			,'post_date'  => __( 'Date', 'ilc' )
 		);
-		return apply_filters( 'internal_links_table_columns', $columns );		
+		return apply_filters( 'internal_links_master_filter', $columns, 'columns' );		
 	}
 
 
@@ -186,7 +186,7 @@ class ilcTable extends WP_List_Table
 			,'post_title' => array( 'post_title', true )
 			,'post_date'  => array( 'post_date', true )
 		);
-		return apply_filters( 'internal_links_sortable_columns', $sortable );
+		return apply_filters( 'internal_links_master_filter', $sortable, 'sortables' );
 	}
 
 

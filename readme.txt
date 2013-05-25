@@ -29,75 +29,52 @@ By default, the plugin gets this columns from <code>wp_posts</code> table: <code
 And its Meta Box displays the following: ID, Title and Date.
 In case you want to extend its functionality you can use the available hooks
 
-== Modifying the Meta Box output ==
+== Master filter ==
 
+Used to modify the SQL query, add the meta box to other post types, add columns to the meta box and set the sortable ones
 <pre>
-function modify_check_link_meta_box_content( $result, $links )
+function internal_links_master_function( $args, $context )
 {
-    global $post;
-
-    // Uncomment the follwing line to see what the $links array contains
-    // The links array contains all posts (and their respective data) that link to the current post
-    /*
-    echo '<'.'pre>';
-            print_r( $links );
-    echo '<'.'/pre>';
-     */
-
-    // Now handle the result:
-    foreach ( $result as $link )
-    {
-            // do stuff
-    }
-
-    return $result;
+	switch ( $context )
+	{
+		# Modify the columns retrived from the database
+		case 'sql':
+			return array( 'ID', 'post_title', 'post_date', 'post_content', 'post_excerpt', 'post_type' );
+		break;
+		# Add Meta Box to other post types
+		case 'metabox':
+			return array( 'post', 'page' );
+		break;
+		# Add columns to the metabox
+		case 'columns':
+			$columns = array(
+				 'ID' => 'ID'
+				,'post_title' => 'Título'
+				,'post_date'  => 'Fecha'
+				,'post_type'  => 'Tipo'
+				,'post_excerpt'  => 'Resumo'
+			);
+			return $columns;
+		break;
+		# Set Meta Box sortable columns
+		case 'sortables':
+			$sortable = array(
+				 'ID' => array( 'ID', true )
+				,'post_title'  => array( 'post_date', true )
+				,'post_date'  => array( 'post_date', true )
+				,'post_type'  => array( 'post_type', true )
+			);
+			return $sortable;
+		break;
+	}
+	return $args;
 }
-add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10, 2 );
-</pre>
 
-== Adding the Meta Box to other post types == 
-
-The default is only 'posts'.
-
-<pre>
-function add_post_types_ilc( $cpts )
+function internal_links_apply_filter()
 {
-    $cpts[] = 'pages';
-    return $cpts;
+	add_filter( 'internal_links_master_filter', 'internal_links_master_function', 10, 2 );
 }
-add_filter( 'internal_links_post_types', 'add_post_types_ilc' );
-</pre>
-
-== Adding columns == 
-
-<pre>
-function add_column_ilc( $cols ) 
-{
-    $columns = array(
-        'ID' => 'ID'
-       ,'post_title' => 'Title'
-       ,'post_date'  => 'Date'
-       ,'post_type'  => 'Post type'
-    );
-    return $columns;
-}
-add_filter( 'internal_links_table_columns', 'add_column_ilc' );
-</pre>
-
-== Adding sortable columns == 
-
-<pre>
-function add_sortable_column_ilc( $cols ) 
-{
-    $sortable = array(
-        'ID' => array( 'ID', true )
-       ,'post_title'  => array( 'post_date', true )
-       ,'post_date'  => array( 'post_date', true )
-       ,'post_type'  => array( 'post_type', true )
-    );
-    return $sortable;
-}
-add_filter( 'internal_links_sortable_columns', 'add_sortable_column_ilc' );
+add_action( 'admin_init', 'internal_links_apply_filter', 10 );
 </pre>
 
 == Modify posts per page == 
