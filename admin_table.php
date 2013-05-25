@@ -171,7 +171,7 @@ class ilcTable extends WP_List_Table
 			,'post_title' => __( 'Title', 'ilc' )
 			,'post_date'  => __( 'Date', 'ilc' )
 		);
-		return apply_filters( 'ilc_table_columns', $columns );		
+		return apply_filters( 'internal_links_table_columns', $columns );		
 	}
 
 
@@ -186,7 +186,7 @@ class ilcTable extends WP_List_Table
 			,'post_title' => array( 'post_title', true )
 			,'post_date'  => array( 'post_date', true )
 		);
-		return apply_filters( 'ilc_sortable_columns', $sortable );
+		return apply_filters( 'internal_links_sortable_columns', $sortable );
 	}
 
 
@@ -215,7 +215,7 @@ class ilcTable extends WP_List_Table
         # >>>> Pagination
 	 	# @since 0.4
         // Per Page Data
-		$per_page     = apply_filters( 'ilc_per_page', 5 );
+		$per_page     = apply_filters( 'internal_links_per_page', 5 );
         $current_page = $this->get_pagenum();
         $total_items  = count( $posts );
         $this->set_pagination_args( array (

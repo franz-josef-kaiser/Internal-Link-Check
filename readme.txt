@@ -1,19 +1,19 @@
 === Plugin Name ===
 Plugin Name:		Internal Link Checker
-Plugin URI:			http://unserkaiser.com/plugins/internal-link-checker/
-Author:				Franz Josef Kaiser, Patrick Matsumura
-Author URI:			http://unserkaiser.com/
-Tags:				admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
+Plugin URI:		http://unserkaiser.com/plugins/internal-link-checker/
+Author:			Franz Josef Kaiser, Patrick Matsumura, Rodolfo Buaiz
+Author URI:		http://unserkaiser.com/
+Tags:			admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
 Requires at least:	3.1
 Tested up to:		3.4
-Stable tag:			0.6
+Stable tag:		1.1
 
-Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post.
+Adds a meta box to the post edit screen that shows all internal links from other posts/pages/post-types to the currently displayed post.
 
 == Description ==
 = Internal Link Checker =
 
-Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. The plugin works out of the box.
+Adds a meta box to the post edit screen that shows all internal links from other posts/pages/post-types to the currently displayed post. The plugin works out of the box.
 
 
 == Installation ==
@@ -25,31 +25,91 @@ No explanation needed - works out of the box. Just activate and be safe.
 
 = How-to =
 
-This shows how to modify the output inside the internal link checker meta box (in case you want to extend its functionality):
+By default, the plugin gets this columns from <code>wp_posts</code> table: <code>ID, post_title, post_date, post_content, post_type</code>.
+And its Meta Box displays the following: ID, Title and Date.
+In case you want to extend its functionality you can use the available hooks
+
+== Modifying the Meta Box output ==
 
 <pre>
 function modify_check_link_meta_box_content( $result, $links )
 {
-	global $post;
+    global $post;
 
-	// Uncomment the follwing line to see what the $links array contains
-	// The links array contains all posts (and their respective data) that link to the current post
-	/*
-	echo '<'.'pre>';
-		print_r( $links );
-	echo '<'.'/pre>';
-	 */
+    // Uncomment the follwing line to see what the $links array contains
+    // The links array contains all posts (and their respective data) that link to the current post
+    /*
+    echo '<'.'pre>';
+            print_r( $links );
+    echo '<'.'/pre>';
+     */
 
-	// Now handle the result:
-	foreach ( $result as $link )
-	{
-		// do stuff
-	}
+    // Now handle the result:
+    foreach ( $result as $link )
+    {
+            // do stuff
+    }
 
-	return $result;
+    return $result;
 }
 add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10, 2 );
 </pre>
+
+== Adding the Meta Box to other post types == 
+
+The default is only 'posts'.
+
+<pre>
+function add_post_types_ilc( $cpts )
+{
+    $cpts[] = 'pages';
+    return $cpts;
+}
+add_filter( 'internal_links_post_types', 'add_post_types_ilc' );
+</pre>
+
+== Adding columns == 
+
+<pre>
+function add_column_ilc( $cols ) 
+{
+    $columns = array(
+        'ID' => 'ID'
+       ,'post_title' => 'Title'
+       ,'post_date'  => 'Date'
+       ,'post_type'  => 'Post type'
+    );
+    return $columns;
+}
+add_filter( 'internal_links_table_columns', 'add_column_ilc' );
+</pre>
+
+== Adding sortable columns == 
+
+<pre>
+function add_sortable_column_ilc( $cols ) 
+{
+    $sortable = array(
+        'ID' => array( 'ID', true )
+       ,'post_title'  => array( 'post_date', true )
+       ,'post_date'  => array( 'post_date', true )
+       ,'post_type'  => array( 'post_type', true )
+    );
+    return $sortable;
+}
+add_filter( 'internal_links_sortable_columns', 'add_sortable_column_ilc' );
+</pre>
+
+== Modify posts per page == 
+
+<pre>
+function posts_per_page_ilc($number) 
+{
+    return 8;
+}
+add_filter( 'internal_links_per_page', 'posts_per_page_ilc' );
+</pre>
+
 
 = Languages =
 
@@ -58,6 +118,7 @@ If you want to help translating, please contact me on G+.
 
 Included:
 EN/DE (Patrick Matsumura)
+pt_BR/es_ES (Rodolfo Buaiz)
 
 == Screenshots ==
 
@@ -159,3 +220,6 @@ Major improvements in code length
 
 = v0.6.1 =
 Shortened admin table class
+
+= v1.1 =
+Fully tested and stable.

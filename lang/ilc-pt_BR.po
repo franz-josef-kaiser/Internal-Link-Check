@@ -2,11 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internal Link Check\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-25 13:58+0100\n"
-"PO-Revision-Date: 2013-05-25 13:58+0100\n"
+"POT-Creation-Date: 2011-12-09 01:26+0100\n"
+"PO-Revision-Date: 2013-05-25 20:38+0100\n"
 "Last-Translator: Rodolfo Buaiz <brasofilo@gmai.com>\n"
 "Language-Team: \n"
-"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,52 +13,57 @@ msgstr ""
 "_nx:1,2;_nx_noop:1,2\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Language: en_US\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../admin_table.php:136
+#: ../admin_table.php:163
 msgid "No links found."
-msgstr ""
+msgstr "Nenhum link encontrado."
 
-#: ../admin_table.php:170
+#: ../admin_table.php:197
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: ../admin_table.php:171
+#: ../admin_table.php:198
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
-#: ../admin_table.php:172
+#: ../admin_table.php:199
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
-#: ../admin_table.php:248
+#: ../admin_table.php:268
 msgid "Edit:"
-msgstr ""
+msgstr "Editar:"
 
-#: ../admin_table.php:253 ../internal-links.php:319
+#: ../admin_table.php:274 ../internal-links.php:314
 msgid "No title set"
-msgstr ""
+msgstr "Sem título"
 
-#: ../internal-links.php:275
+#: ../internal-links.php:270
 msgid "Internal Links"
-msgstr ""
+msgstr "Links Internos"
 
-#: ../internal-links.php:310
+#: ../internal-links.php:305
 msgid "No posts are linking to this post."
-msgstr ""
+msgstr "Não há entradas com links para esta."
 
-#: ../internal-links.php:430
+#: ../internal-links.php:422
 #, php-format
 msgid ""
 "The Update from %1$s to %2$s brings you the following new features, bug "
 "fixes and additions."
 msgstr ""
+"O upgrade da versão %1$s para %2$s traz as seguintes novidades e correções."
 
-#: ../internal-links.php:438
+#: ../internal-links.php:429
 #, php-format
 msgid ""
 "You can also check the nightly builds of %1$sour development repository%2$s "
 "on GitHub. If you got ideas, feature request or want to help with pull "
 "requests, please feel free to do so on GitHub.%3$s"
 msgstr ""
+"Você pode encontrar os \"nightly builds\" em %1$snosso repositório de "
+"desenvolvimento%2$s em GitHub. Se tiver idéias, sugestões ou quiser ajudar "
+"com \"pull requests\", por favor, fique à vontade de fazê-lo em GitHub.%3$s"

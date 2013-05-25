@@ -14,7 +14,11 @@ No examples needed - works out of the box.
 
 h3. How-to
 
-This shows how to modify the output inside the internal link checker meta box via the action:
+By default, the plugin gets this columns from <code>wp_posts</code> table: <code>ID, post_title, post_date, post_content, post_type</code>.
+And its Meta Box displays the following: ID, Title and Date.
+In case you want to extend its functionality you can use the available hooks
+
+h4. Modifying the Meta Box output
 
 <pre>
 function modify_internallink_metabox_content( $sql_result ) {
@@ -38,6 +42,61 @@ function add_internallink_action() {
 add_action( 'admin_init', 'add_internallink_action' );
 </pre>
 
+h4. Adding post types 
+
+The default is only 'posts'.
+
+<pre>
+function add_post_types_ilc( $cpts )
+{
+    $cpts[] = 'pages';
+    return $cpts;
+}
+add_filter( 'internal_links_post_types', 'add_post_types_ilc' );
+</pre>
+
+h4. Adding columns 
+
+<pre>
+function add_column_ilc( $cols ) 
+{
+    $columns = array(
+        'ID' => 'ID'
+       ,'post_title' => 'Title'
+       ,'post_date'  => 'Date'
+       ,'post_type'  => 'Post type'
+    );
+    return $columns;
+}
+add_filter( 'internal_links_table_columns', 'add_column_ilc' );
+</pre>
+
+h4. Adding sortable columns 
+
+<pre>
+function add_sortable_column_ilc( $cols ) 
+{
+    $sortable = array(
+        'ID' => array( 'ID', true )
+       ,'post_title'  => array( 'post_date', true )
+       ,'post_date'  => array( 'post_date', true )
+       ,'post_type'  => array( 'post_type', true )
+    );
+    return $sortable;
+}
+add_filter( 'internal_links_sortable_columns', 'add_sortable_column_ilc' );
+</pre>
+
+h4. Modify posts per page 
+
+<pre>
+function posts_per_page_ilc($number) 
+{
+    return 8;
+}
+add_filter( 'internal_links_per_page', 'posts_per_page_ilc' );
+</pre>
+
 
 h3. Stylesheets
 
@@ -49,11 +108,13 @@ Translation ready.
 
 Languages included:
 EN/DE ("Patrick Matsumura":https://github.com/patrickmatsumura)
+pt_BR/es_ES ("Rodolfo Buaiz":https://github.com/brasofilo)
 
 h4. Authors
 
 visit "Franz Josef Kaiser":https://github.com/franz-josef-kaiser at github | or get social at "G+":https://plus.google.com/u/0/107110219316412982437
 visit "Patrick Matsumura":https://github.com/patrickmatsumura at github | or get social at "G+":https://plus.google.com/u/0/110601372184256601089
+visit "Rodolfo Buaiz":https://github.com/brasofilo at github | or get social at "G+":http://gplus.to/brasofilo
 
 ----------------------------------------------------------------
 
@@ -89,3 +150,4 @@ h4. Changelog
 * _v0.5.4_   Empty posts fix
 * _v0.6_     Major improvements in code length
 * _v0.6.1_   Shortened admin table class
+* _v1.1_     Fully tested and stable.
