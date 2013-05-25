@@ -1,10 +1,10 @@
 h2. Internal Link Checker
 
-**Version: _v0.6_**
+**Version: _v1.1_**
 
 > **Updates** available via the official "wp.org plugin repository":http://wordpress.org/extend/plugins/internal-link-checker/.
 
-Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box - **just activate**!
+Adds a meta box to the post edit screen that shows all internal links from other posts/pages/post-types to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box - **just activate**!
 
 ----------------------------------------------------------------
 
@@ -14,28 +14,67 @@ No examples needed - works out of the box.
 
 h3. How-to
 
-This shows how to modify the output inside the internal link checker meta box via the action:
+By default, the plugin gets this columns from <code>wp_posts</code> table: <code>ID, post_title, post_date, post_content, post_type</code>.
+And its Meta Box displays the following: ID, Title and Date.
+In case you want to extend its functionality you can use the available hooks
+
+h4. Master filter
+
+Used to modify the SQL query, add the meta box to other post types, add columns to the meta box and set the sortable ones
+<pre>
+function internal_links_master_function( $args, $context )
+{
+	switch ( $context )
+	{
+		# Modify the columns retrived from the database
+		case 'sql':
+			return array( 'ID', 'post_title', 'post_date', 'post_content', 'post_excerpt', 'post_type' );
+		break;
+		# Add Meta Box to other post types
+		case 'metabox':
+			return array( 'post', 'page' );
+		break;
+		# Add columns to the metabox
+		case 'columns':
+			$columns = array(
+				 'ID' => 'ID'
+				,'post_title' => 'Título'
+				,'post_date'  => 'Fecha'
+				,'post_type'  => 'Tipo'
+				,'post_excerpt'  => 'Resumo'
+			);
+			return $columns;
+		break;
+		# Set Meta Box sortable columns
+		case 'sortables':
+			$sortable = array(
+				 'ID' => array( 'ID', true )
+				,'post_title'  => array( 'post_date', true )
+				,'post_date'  => array( 'post_date', true )
+				,'post_type'  => array( 'post_type', true )
+			);
+			return $sortable;
+		break;
+	}
+	return $args;
+}
+
+function internal_links_apply_filter()
+{
+	add_filter( 'internal_links_master_filter', 'internal_links_master_function', 10, 2 );
+}
+add_action( 'admin_init', 'internal_links_apply_filter', 10 );
+</pre>
+
+
+h4. Modify posts per page 
 
 <pre>
-function modify_internallink_metabox_content( $sql_result ) {
-	// Uncomment the follwing line to see what the $sql_result array contains
-	// The links array contains all posts (and their respective data) 
-	// that link to the current post
-	echo '<'.'pre>'.var_dump( $sql_result ).'<'.'/pre>';
-
-	// Now handle the result:
-	foreach ( $sql_result as $link )
-	{
-		// do stuff
-	}
-
-	return print $sql_result;
+function posts_per_page_ilc($number) 
+{
+    return 8;
 }
-// Add the action to the admin_init hook
-function add_internallink_action() {
-	add_action( 'internal_links_meta_box', 'modify_internallink_metabox_content', 10 ); 
-}
-add_action( 'admin_init', 'add_internallink_action' );
+add_filter( 'internal_links_per_page', 'posts_per_page_ilc' );
 </pre>
 
 
@@ -49,11 +88,13 @@ Translation ready.
 
 Languages included:
 EN/DE ("Patrick Matsumura":https://github.com/patrickmatsumura)
+pt_BR/es_ES ("Rodolfo Buaiz":https://github.com/brasofilo)
 
 h4. Authors
 
 visit "Franz Josef Kaiser":https://github.com/franz-josef-kaiser at github | or get social at "G+":https://plus.google.com/u/0/107110219316412982437
 visit "Patrick Matsumura":https://github.com/patrickmatsumura at github | or get social at "G+":https://plus.google.com/u/0/110601372184256601089
+visit "Rodolfo Buaiz":https://github.com/brasofilo at github | or get social at "G+":http://gplus.to/brasofilo
 
 ----------------------------------------------------------------
 
@@ -89,3 +130,4 @@ h4. Changelog
 * _v0.5.4_   Empty posts fix
 * _v0.6_     Major improvements in code length
 * _v0.6.1_   Shortened admin table class
+* _v1.1_     Fully tested and stable.

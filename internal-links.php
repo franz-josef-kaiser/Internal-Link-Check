@@ -4,9 +4,9 @@
 Plugin Name: Internal links check
 Plugin URI:  https://github.com/franz-josef-kaiser/Internal-Link-Check
 Description: Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
-Author:      Franz Josef Kaiser, Patrick Matsumura
+Author:      Franz Josef Kaiser, Patrick Matsumura, Rodolfo Buaiz
 Author URI:  https://unserkaiser.com
-Version:     0.6.1
+Version:     1.1
 Text Domain: ilc
 License:     GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -228,19 +228,22 @@ class ilcInit
 
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
+		
+		$args = array( 'ID', 'post_title', 'post_date', 'post_content', 'post_type' );
+		$sql_select = implode( ', ', apply_filters( 'internal_links_master_filter', $args, 'sql' ) );
+		
 		// SQL: newest first
-		$sql_results = $wpdb->get_results( 
+		$sql_results = $wpdb->get_results(
 			 $wpdb->prepare( "
-				SELECT ID, post_title, post_date, post_content, post_type 
-					FROM %s
+				SELECT $sql_select
+					FROM $wpdb->posts
 				WHERE post_content 
 					LIKE %s
-				ORDER BY %s %s
-			 " )
-			,"{$wpdb->prefix}posts"
-			,'%'.like_escape( $current_link ).'%'
-			,$this->orderby
-			,$this->order
+				AND post_status = 'publish'
+				ORDER BY $this->orderby $this->order
+				 " 
+				,'%' . like_escape( $current_link ) . '%'
+			)
 		);
 
 		return $sql_results;
@@ -268,12 +271,14 @@ class ilcInit
 	 */
 	public function add_meta_box()
 	{
-		add_meta_box( 
-			 $this->meta_box_name
-			,__( 'Internal Links', 'ilc' )
-			,array( $this, 'load_table' )
-			,'post' 
-		);
+		$post_types = apply_filters( 'internal_links_master_filter', array( 'post' ), 'metabox' );
+		foreach( $post_types as $cpt )
+			add_meta_box( 
+				 $this->meta_box_name
+				,__( 'Internal Links', 'ilc' )
+				,array( $this, 'load_table' )
+				,$cpt
+			);
 	}
 
 

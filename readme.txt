@@ -1,17 +1,19 @@
 === Plugin Name ===
 Plugin Name:		Internal Link Checker
-Plugin URI:			http://unserkaiser.com/plugins/internal-link-checker/
-Author:				Franz Josef Kaiser, Patrick Matsumura
-Author URI:			http://unserkaiser.com/
-Tags:				admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
+Plugin URI:		http://unserkaiser.com/plugins/internal-link-checker/
+Author:			Franz Josef Kaiser, Patrick Matsumura, Rodolfo Buaiz
+Author URI:		http://unserkaiser.com/
+Tags:			admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
 Requires at least:	3.1
 Tested up to:		3.4
-Stable tag:			0.6
+Stable tag:		1.1
+
+Adds a meta box to the post edit screen that shows all internal links from other posts/pages/post-types to the currently displayed post.
 
 == Description ==
 = Internal Link Checker =
 
-Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. The plugin works out of the box.
+Adds a meta box to the post edit screen that shows all internal links from other posts/pages/post-types to the currently displayed post. The plugin works out of the box.
 
 
 == Installation ==
@@ -23,31 +25,68 @@ No explanation needed - works out of the box. Just activate and be safe.
 
 = How-to =
 
-This shows how to modify the output inside the internal link checker meta box (in case you want to extend its functionality):
+By default, the plugin gets this columns from <code>wp_posts</code> table: <code>ID, post_title, post_date, post_content, post_type</code>.
+And its Meta Box displays the following: ID, Title and Date.
+In case you want to extend its functionality you can use the available hooks
+
+== Master filter ==
+
+Used to modify the SQL query, add the meta box to other post types, add columns to the meta box and set the sortable ones
+<pre>
+function internal_links_master_function( $args, $context )
+{
+	switch ( $context )
+	{
+		# Modify the columns retrived from the database
+		case 'sql':
+			return array( 'ID', 'post_title', 'post_date', 'post_content', 'post_excerpt', 'post_type' );
+		break;
+		# Add Meta Box to other post types
+		case 'metabox':
+			return array( 'post', 'page' );
+		break;
+		# Add columns to the metabox
+		case 'columns':
+			$columns = array(
+				 'ID' => 'ID'
+				,'post_title' => 'Título'
+				,'post_date'  => 'Fecha'
+				,'post_type'  => 'Tipo'
+				,'post_excerpt'  => 'Resumo'
+			);
+			return $columns;
+		break;
+		# Set Meta Box sortable columns
+		case 'sortables':
+			$sortable = array(
+				 'ID' => array( 'ID', true )
+				,'post_title'  => array( 'post_date', true )
+				,'post_date'  => array( 'post_date', true )
+				,'post_type'  => array( 'post_type', true )
+			);
+			return $sortable;
+		break;
+	}
+	return $args;
+}
+
+function internal_links_apply_filter()
+{
+	add_filter( 'internal_links_master_filter', 'internal_links_master_function', 10, 2 );
+}
+add_action( 'admin_init', 'internal_links_apply_filter', 10 );
+</pre>
+
+== Modify posts per page == 
 
 <pre>
-function modify_check_link_meta_box_content( $result, $links )
+function posts_per_page_ilc($number) 
 {
-	global $post;
-
-	// Uncomment the follwing line to see what the $links array contains
-	// The links array contains all posts (and their respective data) that link to the current post
-	/*
-	echo '<'.'pre>';
-		print_r( $links );
-	echo '<'.'/pre>';
-	 */
-
-	// Now handle the result:
-	foreach ( $result as $link )
-	{
-		// do stuff
-	}
-
-	return $result;
+    return 8;
 }
-add_filter( 'internal_links_meta_box', 'modify_check_link_meta_box_content', 10, 2 );
+add_filter( 'internal_links_per_page', 'posts_per_page_ilc' );
 </pre>
+
 
 = Languages =
 
@@ -56,6 +95,7 @@ If you want to help translating, please contact me on G+.
 
 Included:
 EN/DE (Patrick Matsumura)
+pt_BR/es_ES (Rodolfo Buaiz)
 
 == Screenshots ==
 
@@ -157,3 +197,6 @@ Major improvements in code length
 
 = v0.6.1 =
 Shortened admin table class
+
+= v1.1 =
+Fully tested and stable.
