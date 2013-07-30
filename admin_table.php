@@ -1,5 +1,4 @@
 <?php
-// Secure: don't allow to load this file directly
 defined( 'ABSPATH' ) OR exit;
 
 /**
@@ -13,28 +12,21 @@ defined( 'ABSPATH' ) OR exit;
  * @subpackage WP List Table extension
  * @license GNU GPL 2
  * @since 0.2.7
- *
- * @see /wp-admin/includes/class-wp-comments-list-table.php Comments List Table class.
- * @tutorial @link http://codex.wordpress.org/Class_Reference/WP_List_Table
- * @example @link http://wordpress.org/extend/plugins/custom-list-table-example
  */
 class ilcTable extends WP_List_Table
 {
 	/**
 	 * Meta Box name
 	 * Retrieved via init class
-	 *
 	 * @since  0.6
 	 * @access public
 	 * @var    string
 	 */
 	public $meta_box_name;
 
-
 	/**
 	 * Order SQL results ASC/DESC
 	 * Set by $_GET (query arg)
-	 *
 	 * @since  0.5
 	 * @access public
 	 * @var    string
@@ -45,13 +37,11 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Order SQL results by columns
 	 * Set by $_GET (query arg)
-	 *
 	 * @since  0.5
 	 * @access public
 	 * @var    string
 	 */
 	public $orderby;
-
 
 	/**
 	 * Constructor
@@ -69,10 +59,10 @@ class ilcTable extends WP_List_Table
 		$this->set_orderby();
 
 		// Setup
-		parent :: __construct( array(
-			 'singular' => 'internal link'
-			,'plural'   => 'internal links'
-			,'ajax'     => true
+		parent::__construct( array(
+			'singular' => 'internal link',
+			'plural'   => 'internal links',
+			'ajax'     => true
 		) );
 
 		// Display Output
@@ -84,36 +74,37 @@ class ilcTable extends WP_List_Table
 		# echo '</form>';
 	}
 
-
 	/**
 	 * Sets the current order argument for the SQL Query
 	 * based on the $_GET array
-	 *
-	 * @return void
+	 * @return string
 	 */
 	public function set_order()
 	{
 		$order = 'DESC';
-		if ( isset( $_GET['order'] ) AND $_GET['order'] )
+		if (
+			isset( $_GET['order'] )
+			AND $_GET['order']
+		)
 			$order = $_GET['order'];
 		$this->order = $order;
 	}
 
-
 	/**
 	 * Sets the current orderby argument for the SQL Query
 	 * based on the $_GET array
-	 *
-	 * @return void
+	 * @return string
 	 */
 	public function set_orderby()
 	{
 		$orderby = 'post_date';
-		if ( isset( $_GET['orderby'] ) AND $_GET['orderby'] )
+		if (
+			isset( $_GET['orderby'] )
+			AND $_GET['orderby']
+		)
 			$orderby = $_GET['orderby'];
 		$this->orderby = $orderby;
 	}
-
 
 	/**
 	 * (non-PHPdoc)
@@ -124,7 +115,6 @@ class ilcTable extends WP_List_Table
 		return current_user_can( 'edit_posts' );
 	}
 
-
 	/**
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::no_items()
@@ -134,10 +124,9 @@ class ilcTable extends WP_List_Table
 		_e( 'No links found.', 'ilc' );
 	}
 
-
 	/**
-	 * (non-PHPdoc)
 	 * @see WP_List_Table::get_views()
+	 * @return array
 	 */
 	public function get_views()
 	{
@@ -157,39 +146,36 @@ class ilcTable extends WP_List_Table
 		return array();
 	}
 
-
 	/**
-	 * (non-PHPdoc)
-	 * @see WP_List_Table::get_columns()
+	 * Column Names
+	 * @return array
 	 */
 	public function get_columns()
 	{
 		return array(
-			 'ID'         => __( 'ID', 'ilc' )
-			,'post_title' => __( 'Title', 'ilc' )
-			,'post_date'  => __( 'Date', 'ilc' )
+			'ID'         => __( 'ID', 'ilc' ),
+			'post_title' => __( 'Title', 'ilc' ),
+			'post_date'  => __( 'Date', 'ilc' ),
 		);
 	}
 
-
 	/**
-	 * (non-PHPdoc)
+	 * Get sortable columns
 	 * @see WP_List_Table::get_sortable_columns()
+	 * @return array
 	 */
 	public function get_sortable_columns()
 	{
 		return array(
-			 'ID'         => array( 'ID', true )
-			,'post_title' => array( 'post_title', true )
-			,'post_date'  => array( 'post_date', true )
+			'ID'         => array( 'ID', true ),
+			'post_title' => array( 'post_title', true ),
+			'post_date'  => array( 'post_date', true ),
 		);
 	}
-
 
 	/**
 	 * Prepare data for display
 	 * Must get defined in extended class here
-	 * (non-PHPdoc)
 	 * @see WP_List_Table::prepare_items()
 	 */
 	public function prepare_items()
@@ -209,18 +195,17 @@ class ilcTable extends WP_List_Table
 		empty( $posts ) AND $posts = array();
 
         # >>>> Pagination
-	 	# @since 0.4
         // Per Page Data
 		$per_page     = 5;
         $current_page = $this->get_pagenum();
         $total_items  = count( $posts );
-        $this->set_pagination_args( array (
-        	 // Calculate the total number of items
-             'total_items' => $total_items
-             // Determine how many items to show on a page
-            ,'per_page'    => $per_page
-             // Calculate the total number of pages
-            ,'total_pages' => ceil( $total_items / $per_page )
+        $this->set_pagination_args( array(
+        	// Calculate the total number of items
+            'total_items' => $total_items,
+            // Determine how many items to show on a page
+            'per_page'    => $per_page,
+            // Calculate the total number of pages
+            'total_pages' => ceil( $total_items / $per_page ),
         ) );
 
 		// Setup first and last post index/key for current posts array filter.
@@ -255,11 +240,9 @@ class ilcTable extends WP_List_Table
         $this->items = $posts_array;
 	}
 
-
 	/**
 	 * A single column
 	 * Must get defined in extended class here
-	 *
 	 * @param  object $item
 	 * @param  string $column_name
 	 * @return string $item->column_name
@@ -272,13 +255,12 @@ class ilcTable extends WP_List_Table
 
 	/**
 	 * Override of table nav to avoid breaking with bulk actions & according nonce field
-	 * (non-PHPdoc)
-	 *
 	 * @see WP_List_Table::display_tablenav()
 	 * @param  string $which
 	 * @return string HTML
 	 */
-	public  function display_tablenav( $which ) {
+	public  function display_tablenav( $which )
+	{
 		# if ( 'top' == $which )
 			# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
 		?>
@@ -297,14 +279,13 @@ class ilcTable extends WP_List_Table
 		<?php
 	}
 
-
 	/**
 	 * Disables the views for 'side' context as there's not enough free space in the UI
 	 * Only displays them on screen/browser refresh. Else we'd have to do this via an AJAX DB update.
-	 *
-	 * @since 0.6
-	 * (non-PHPdoc)
-	 * @see WP_List_Table::extra_tablenav()
+	 * @since  0.6
+	 * @see    WP_List_Table::extra_tablenav()
+	 * @param  $which string
+	 * @return string HTML
 	 */
 	public function extra_tablenav( $which )
 	{
@@ -313,7 +294,7 @@ class ilcTable extends WP_List_Table
 		// Abort for empty views array - needed during development, maybe later if settings are present
 		$views = $this->get_views();
 		if ( empty( $views ) )
-			return;
+			return '';
 
 		// Loop through the context/priority array
 		foreach ( $wp_meta_boxes[ get_current_screen()->id ] as $context => $priority )
@@ -323,12 +304,15 @@ class ilcTable extends WP_List_Table
 				// Check if the link meta box is in the current priority
 				$link_box = in_array( $this->meta_box_name, array_keys( $meta_boxes ) );
 				// If so: Abort
-				if ( $link_box AND 'side' === $context )
-					return;
+				if (
+					$link_box
+					AND 'side' === $context
+				)
+					return '';
 			}
 		}
 
 		// If we're not in the 'side' context, display the views
-		$this->views();
+		return $this->views();
 	}
 }
