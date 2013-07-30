@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) OR exit;
  * Description: Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
  * Author:      Franz Josef Kaiser, Patrick Matsumura
  * Author URI:  https://unserkaiser.com
- * Version:     0.6.1
+ * Version:     0.6.2
  * Text Domain: ilc
  * License:     GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * (c) Copyright 2010-2013 by Franz Josef Kaiser <wecodemore@gmail.com>
@@ -365,11 +365,10 @@ class ilcInit
 
 		# >>>> output
 		$output = '<hr /><div style="font-weight: normal;">';
-		$output .= sprintf( __(
-				'The Update from %1$s to %2$s brings you the following new features, bug fixes and additions.'
-				, 'ilc' )
-			, $curr_ver
-			, $r->new_version
+		$output .= sprintf(
+			__( 'The Update from %1$s to %2$s brings you the following new features, bug fixes and additions.', 'ilc' ),
+			$curr_ver,
+			$r->new_version
 		);
 		$output .= "<pre>{$changelog}</pre>";
 		return print $output .= sprintf(

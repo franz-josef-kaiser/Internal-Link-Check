@@ -157,3 +157,6 @@ Major improvements in code length
 
 = v0.6.1 =
 Shortened admin table class
+
+= v0.6.2 =
+Reformatted code styling to prepare rewrite
