@@ -1,21 +1,19 @@
 <?php
 // Secure: don't allow to load this file directly
-! defined( 'ABSPATH' ) AND exit;
-
-
+defined( 'ABSPATH' ) OR exit;
 
 /**
  * Extension for the WP core list table class
- * 
+ *
  * Renders the contents of the meta box
- * 
+ *
  * @author Franz Josef Kaiser
- * 
+ *
  * @package ILC
  * @subpackage WP List Table extension
  * @license GNU GPL 2
  * @since 0.2.7
- * 
+ *
  * @see /wp-admin/includes/class-wp-comments-list-table.php Comments List Table class.
  * @tutorial @link http://codex.wordpress.org/Class_Reference/WP_List_Table
  * @example @link http://wordpress.org/extend/plugins/custom-list-table-example
@@ -25,7 +23,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Meta Box name
 	 * Retrieved via init class
-	 * 
+	 *
 	 * @since  0.6
 	 * @access public
 	 * @var    string
@@ -36,7 +34,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Order SQL results ASC/DESC
 	 * Set by $_GET (query arg)
-	 * 
+	 *
 	 * @since  0.5
 	 * @access public
 	 * @var    string
@@ -47,7 +45,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Order SQL results by columns
 	 * Set by $_GET (query arg)
-	 * 
+	 *
 	 * @since  0.5
 	 * @access public
 	 * @var    string
@@ -57,9 +55,9 @@ class ilcTable extends WP_List_Table
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param  string $meta_box_name
-	 * @return void
+	 * @return \ilcTable
 	 */
 	public function __construct( $meta_box_name )
 	{
@@ -90,7 +88,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Sets the current order argument for the SQL Query
 	 * based on the $_GET array
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_order()
@@ -105,7 +103,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Sets the current orderby argument for the SQL Query
 	 * based on the $_GET array
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_orderby()
@@ -121,7 +119,7 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::ajax_user_can()
 	 */
-	public function ajax_user_can() 
+	public function ajax_user_can()
 	{
 		return current_user_can( 'edit_posts' );
 	}
@@ -131,7 +129,7 @@ class ilcTable extends WP_List_Table
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::no_items()
 	 */
-	public function no_items() 
+	public function no_items()
 	{
 		_e( 'No links found.', 'ilc' );
 	}
@@ -157,7 +155,7 @@ class ilcTable extends WP_List_Table
 		#return $example;
 
 		return array();
-	} 
+	}
 
 
 	/**
@@ -200,10 +198,10 @@ class ilcTable extends WP_List_Table
 		$hidden   = array();
 		$sortable = $this->get_sortable_columns();
 
-        $this->_column_headers = array( 
+        $this->_column_headers = array(
         	 $columns
         	,$hidden
-        	,$sortable 
+        	,$sortable
         );
 
         // SQL results
@@ -233,7 +231,7 @@ class ilcTable extends WP_List_Table
         // count one post up as we'd have null else
         $first_post = $last_post - $per_page +1;
 
-        // Setup the range of keys/indizes that contain 
+        // Setup the range of keys/indizes that contain
         // the posts on the currently displayed page(d).
         // Flip keys with values as the range outputs the range in the values.
         $range = array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
@@ -261,7 +259,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * A single column
 	 * Must get defined in extended class here
-	 * 
+	 *
 	 * @param  object $item
 	 * @param  string $column_name
 	 * @return string $item->column_name
@@ -275,8 +273,9 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Override of table nav to avoid breaking with bulk actions & according nonce field
 	 * (non-PHPdoc)
+	 *
 	 * @see WP_List_Table::display_tablenav()
-	 * @access public
+	 * @param  string $which
 	 * @return string HTML
 	 */
 	public  function display_tablenav( $which ) {
@@ -284,7 +283,7 @@ class ilcTable extends WP_List_Table
 			# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
-			<!-- 
+			<!--
 			<div class="alignleft actions">
 				<?php # $this->bulk_actions( $which ); ?>
 			</div>
@@ -302,7 +301,7 @@ class ilcTable extends WP_List_Table
 	/**
 	 * Disables the views for 'side' context as there's not enough free space in the UI
 	 * Only displays them on screen/browser refresh. Else we'd have to do this via an AJAX DB update.
-	 * 
+	 *
 	 * @since 0.6
 	 * (non-PHPdoc)
 	 * @see WP_List_Table::extra_tablenav()

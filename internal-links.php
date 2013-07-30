@@ -1,68 +1,52 @@
 <?php
-! defined( 'ABSPATH' ) AND exit;
-/*
-Plugin Name: Internal links check
-Plugin URI:  https://github.com/franz-josef-kaiser/Internal-Link-Check
-Description: Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
-Author:      Franz Josef Kaiser, Patrick Matsumura
-Author URI:  https://unserkaiser.com
-Version:     0.6.1
-Text Domain: ilc
-License:     GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+defined( 'ABSPATH' ) OR exit;
+/**
+ * Plugin Name: Internal links check
+ * Plugin URI:  https://github.com/franz-josef-kaiser/Internal-Link-Check
+ * Description: Adds a meta box to the post edit screen that shows all internal links from other posts to the currently displayed post. This way you can easily check if you should fix links before deleting a post. There are no options needed. The plugin works out of the box.
+ * Author:      Franz Josef Kaiser, Patrick Matsumura
+ * Author URI:  https://unserkaiser.com
+ * Version:     0.6.1
+ * Text Domain: ilc
+ * License:     GPL v2 @link http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-	(c) Copyright 2010 - 2012 by Franz Josef Kaiser <mailto: office (a) unserkaiser.com>
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * (c) Copyright 2010-2013 by Franz Josef Kaiser <wecodemore@gmail.com>
+ */
 
 
 
-if ( ! class_exists( 'ilcInit' ) )
-{
-	// init class
-	add_action( 'admin_init', array( 'ilcInit', 'init' ), 0 );
+// init class
+add_action( 'admin_init', array( 'ilcInit', 'init' ), 0 );
 
 /**
  * Factory
- * 
+ *
  * @author     Franz Josef Kaiser <wecodemore@gmail.com>
- * @copyright  © Franz Josef Kaiser 2012
- * 
+ * @copyright  © Franz Josef Kaiser 2013
+ *
  * @since      0.1
- * 
+ *
  * @package    WordPress
  * @subpackage Internal Link Checker bootstrap
- * 
+ *
  * @license    GNU GPL 2
  */
 class ilcInit
 {
 	/**
 	 * Instance
-	 * 
+	 *
 	 * @access protected
 	 * @var    object
 	 */
-	static protected $instance;
+	static public $instance = null;
 
 
 	/**
 	 * Used for update notices
 	 * Fetches the readme file from the official plugin repo trunk.
 	 * Adds to the "in_plugin_update_message-$file" hook
-	 * 
+	 *
 	 * @access public
 	 * @var    string
 	 */
@@ -71,7 +55,7 @@ class ilcInit
 
 	/**
 	 * Settings
-	 * 
+	 *
 	 * @since  0.2.2
 	 * @access public
 	 * @var    array
@@ -79,7 +63,7 @@ class ilcInit
 	public $args = array(
 		 'element'         => 'li'
 		,'element_class'   => ''
-		 // Att.: <ol> will be auto converted to <ul> 
+		 // Att.: <ol> will be auto converted to <ul>
 		,'container'       => ''
 		,'container_class' => ''
 		,'nofollow'        => false
@@ -89,7 +73,7 @@ class ilcInit
 
 	/**
 	 * Container for SQL result
-	 * 
+	 *
 	 * @since  0.2
 	 * @access public
 	 * @var    array
@@ -100,12 +84,12 @@ class ilcInit
 	/**
 	 * Sets the meta box name
 	 * Used to determin in the extended WP_List_Table class
-	 * in which context the meta box is. 
+	 * in which context the meta box is.
 	 * Needed to determine if the whole UI should be shown
-	 * 
+	 *
 	 * @since  0.6
 	 * @access public
-	 * @var    unknown_type
+	 * @var    string
 	 */
 	public $meta_box_name = 'link-check';
 
@@ -113,22 +97,22 @@ class ilcInit
 	/**
 	 * Init
 	 * Instantiates the class and loads translation files
-	 * 
+	 *
 	 * @since  0.2
-	 * @return void
+	 * @return \ilcInit
 	 */
 	static public function init()
 	{
-		null === self :: $instance AND self :: $instance = new self;
-		return self :: $instance;
+		null === self::$instance AND self::$instance = new self;
+		return self::$instance;
 	}
 
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @since  0.2
-	 * @return void
+	 * @return \ilcInit
 	 */
 	public function __construct()
 	{
@@ -163,7 +147,7 @@ class ilcInit
 	 * @link   http://wordpress.stackexchange.com/a/33314 Translation Tutorial by the author
 	 * @return void
 	 */
-	static function load_textdomain() 
+	static function load_textdomain()
 	{
 		global $locale;
 
@@ -172,7 +156,7 @@ class ilcInit
 		$domain = 'ilc';
 
 		// in themes/plugins/mu-plugins directory
-		load_textdomain( 
+		load_textdomain(
 			 $domain
 			,"{$dir}lang/{$domain}-{$locale}.mo"
 		);
@@ -181,14 +165,14 @@ class ilcInit
 
 	/**
 	 * Extension/File/Class loader
-	 * 
+	 *
 	 * @since  0.2.7
 	 * @return void
 	 */
 	public function load_extensions()
 	{
-		$files = array( 
-			 'admin_table' 
+		$files = array(
+			 'admin_table'
 		);
 
 		foreach ( $files as $extension )
@@ -206,9 +190,10 @@ class ilcInit
 	 * @since  0.2.8
 	 * @uses   get_plugin_data
 	 * @param  string $value default = 'Version'; Valid: see Header Comment Block
+	 * @param  bool   $mark_up
 	 * @return string $data
 	 */
-	static private function get_plugin_data( $value = 'Version', $mark_up = true ) 
+	static private function get_plugin_data( $value = 'Version', $mark_up = true )
 	{
 		$data = get_plugin_data( __FILE__, $mark_up );
 		return $data[ $value ];
@@ -218,9 +203,9 @@ class ilcInit
 	/**
 	 * SQL Query
 	 * Adds content to two class vars: The resulting array & the counter
-	 * 
+	 *
 	 * @since  0.2
-	 * @return object $links 
+	 * @return object $links
 	 */
 	public function get_sql_results()
 	{
@@ -229,18 +214,16 @@ class ilcInit
 		// get_permalink() cares about rewrite rules
 		$current_link = get_permalink( $GLOBALS['post']->ID );
 		// SQL: newest first
-		$sql_results = $wpdb->get_results( 
-			 $wpdb->prepare( "
-				SELECT ID, post_title, post_date, post_content, post_type 
-					FROM %s
-				WHERE post_content 
+		$sql_results = $wpdb->get_results( $wpdb->prepare( "
+				SELECT ID, post_title, post_date, post_content, post_type
+					FROM {$wpdb->posts}
+				WHERE post_content
 					LIKE %s
 				ORDER BY %s %s
-			 " )
-			,"{$wpdb->prefix}posts"
-			,'%'.like_escape( $current_link ).'%'
-			,$this->orderby
-			,$this->order
+			" ),
+			'%'.like_escape( $current_link ).'%',
+			$this->orderby,
+			$this->order
 		);
 
 		return $sql_results;
@@ -249,17 +232,17 @@ class ilcInit
 
 	/**
 	 * Wrapper to return the sql results for the admin table class
-	 * 
+	 *
 	 * @since  0.2.7
 	 * @see    WP_List_Table::prepare_items()
 	 * @return array $sql_results
 	 */
 	public function the_sql_results()
 	{
-		return isset( $this->sql_results ) ? $this->sql_results : self :: get_sql_results();
+		return isset( $this->sql_results ) ? $this->sql_results : self::get_sql_results();
 	}
 
-	
+
 	/**
 	 * Adds the meta box to the post edit screen
 	 *
@@ -268,11 +251,13 @@ class ilcInit
 	 */
 	public function add_meta_box()
 	{
-		add_meta_box( 
-			 $this->meta_box_name
-			,__( 'Internal Links', 'ilc' )
-			,array( $this, 'load_table' )
-			,'post' 
+		echo '<h1>TEST</h1>';
+		var_dump( __FUNCTION__ );
+		add_meta_box(
+			$this->meta_box_name,
+			__( 'Internal Links', 'ilc' ),
+			array( $this, 'load_table' ),
+			'post'
 		);
 	}
 
@@ -280,7 +265,7 @@ class ilcInit
 	/**
 	 * Adds a native admin UI table
 	 * Callback fn for add_meta_box()
-	 * 
+	 *
 	 * @since  0.2 | renamed from meta_box_cb()
 	 * @return void
 	 */
@@ -297,7 +282,7 @@ class ilcInit
 
 	/**
 	 * Builds the output
-	 * 
+	 *
 	 * @since  0.2
 	 * @uses   markup()
 	 * @return string $output
@@ -347,7 +332,7 @@ class ilcInit
 
 	/**
 	 * Builds the markup
-	 * 
+	 *
 	 * @since  0.2
 	 * @uses   markup_filter()
 	 * @param  array $results SQL Query results ordered
@@ -376,14 +361,14 @@ class ilcInit
 	/**
 	 * Replaces markup placeholders
 	 * Deletes placeholders if the settings array contains an empty string
-	 * 
+	 *
 	 * @since  0.2
 	 * @param  string $input
 	 * @return string $markup
 	 */
 	public function markup_filter( $input )
 	{
-		return strtr( 
+		return strtr(
 			 $input
 			,array(
 			 	 '%EL%'              => $this->args['element']
@@ -392,7 +377,7 @@ class ilcInit
 				,'%EL_CLASS%'        => $this->args['element_class']    ? " class='{$this->args['element_class']}'" : ''
 				,'%CONTAINER_CLASS%' => $this->args['container_class']  ? " class='{$this->args['container_class']}'" : ''
 				,'%NOFOLLOW%'        => $this->args['nofollow']         ? ' rel="nofollow"' : ''
-			) 
+			)
 		);
 	}
 
@@ -403,7 +388,7 @@ class ilcInit
 	/**
 	 * Displays an update message for plugin list screens.
 	 * Shows only the version updates from the current until the newest version
-	 * 
+	 *
 	 * @since  0.2.8
 	 * @param  array  $plugin_data
 	 * @param  object $r
@@ -424,15 +409,15 @@ class ilcInit
 
 		# >>>> output
 		$output  = '<hr /><div style="font-weight: normal;">';
-		$output .= sprintf( __( 
+		$output .= sprintf( __(
 				 'The Update from %1$s to %2$s brings you the following new features, bug fixes and additions.'
 				,'ilc' )
 			,$curr_ver
-			,$r->new_version 
+			,$r->new_version
 		);
 		$output .= "<pre>{$changelog}</pre>";
-		$output .= sprintf( 
-			 __( 
+		$output .= sprintf(
+			 __(
 				 'You can also check the nightly builds of %1$sour development repository%2$s on GitHub. If you got ideas, feature request or want to help with pull requests, please feel free to do so on GitHub.%3$s'
 				,'ilc'
 			 )
@@ -445,5 +430,3 @@ class ilcInit
 		return print $output;
 	}
 } // END Class ilcInit
-
-} // endif;
