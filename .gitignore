@@ -8,3 +8,4 @@
 
 # Package Managers
 node_modules
+/vendor/
