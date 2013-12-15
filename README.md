@@ -14,14 +14,15 @@ as issue as well. I'll consider and discuss everything down the road.
 ---
 
 ## Plugin Name
-Plugin Name:        Internal Link Checker
-Plugin URI:         http://unserkaiser.com/plugins/internal-link-checker/
-Author:             Franz Josef Kaiser, Patrick Matsumura, Rodolfo Buaiz
-Author URI:         http://unserkaiser.com/
-Tags:               admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
-Requires at least:  3.0
-Tested up to:       3.8
-Stable tag:         0.6
+
+* Plugin Name:        Internal Link Checker
+* Plugin URI:         http://unserkaiser.com/plugins/internal-link-checker/
+* Author:             Franz Josef Kaiser, Patrick Matsumura, Rodolfo Buaiz
+* Author URI:         http://unserkaiser.com/
+* Tags:               admin, link, links, meta, box, meta_box, missing, blogroll, broken, maintenance, posts, 404
+* Requires at least:  3.0
+* Tested up to:       3.8
+* Stable tag:         0.6
 
 ## Description
 
