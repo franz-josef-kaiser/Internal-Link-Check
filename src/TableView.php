@@ -1,68 +1,43 @@
 <?php
-defined( 'ABSPATH' ) OR exit;
+
+defined( 'ABSPATH' ) or exit;
+
+require_once "TableViewInterface.php";
 
 /**
- * Extension for the WP core list table class
- *
- * Renders the contents of the meta box
- *
- * @author Franz Josef Kaiser
- *
- * @package ILC
- * @subpackage WP List Table extension
- * @license GNU GPL 2
- * @since 0.2.7
+ * Class ILVTableView
  */
-class ilcTable extends WP_List_Table
+class ILCTableView extends WP_List_Table implements ILCTableViewInterface
 {
-	/**
-	 * Meta Box name
-	 * Retrieved via init class
-	 * @since  0.6
-	 * @access public
-	 * @var    string
-	 */
-	public $meta_box_name;
+	public $order = 'DESC';
 
-	/**
-	 * Order SQL results ASC/DESC
-	 * Set by $_GET (query arg)
-	 * @since  0.5
-	 * @access public
-	 * @var    string
-	 */
-	public $order;
+	public $orderby = 'post_date';
+
+	private $queryObject = null;
 
 
-	/**
-	 * Order SQL results by columns
-	 * Set by $_GET (query arg)
-	 * @since  0.5
-	 * @access public
-	 * @var    string
-	 */
-	public $orderby;
+	public function __construct()
+	{
+		// Prevent rendering on object creation.
 
-	/**
-	 * Constructor
-	 *
-	 * @param  string $meta_box_name
-	 * @return \ilcTable
-	 */
-	public function __construct( $meta_box_name )
+		# $this->setQueryObject( $queryObject );
+	}
+
+	public function render()
 	{
 		// meta box name
-		$this->meta_box_name = $meta_box_name;
+		# $this->meta_box_name = $meta_box_name;
 
 		// Args for the SQL query, based on query vars in $_GET
-		$this->set_order();
-		$this->set_orderby();
+		$this->setOrder();
+		$this->setOrderBy();
 
 		// Setup
 		parent::__construct( array(
 			'singular' => 'internal link',
 			'plural'   => 'internal links',
-			'ajax'     => true
+			'ajax'     => true,
+			'screen'   => null,
 		) );
 
 		// Display Output
@@ -74,40 +49,45 @@ class ilcTable extends WP_List_Table
 		# echo '</form>';
 	}
 
-	/**
-	 * Sets the current order argument for the SQL Query
-	 * based on the $_GET array
-	 * @return string
-	 */
-	public function set_order()
+	public function setOrder()
 	{
-		$order = 'DESC';
-		if (
-			isset( $_GET['order'] )
-			AND $_GET['order']
-		)
-			$order = $_GET['order'];
-		$this->order = $order;
+		isset( $_GET['order'] )
+			AND $this->order = esc_attr( $_GET['order'] );
+	}
+
+	public function setOrderBy()
+	{
+		isset( $_GET['orderby'] )
+			AND $this->orderby = esc_attr( $_GET['orderby'] );
+	}
+
+	public function getOrder()
+	{
+		return $this->order;
+	}
+
+	public function getOrderBy()
+	{
+		return $this->orderby;
 	}
 
 	/**
-	 * Sets the current orderby argument for the SQL Query
-	 * based on the $_GET array
-	 * @return string
+	 * @param ILCSQLResultsInterface $queryObject
+	 * @return $this
 	 */
-	public function set_orderby()
+	public function setQueryObject( ILCSQLResultsInterface $queryObject  )
 	{
-		$orderby = 'post_date';
-		if (
-			isset( $_GET['orderby'] )
-			AND $_GET['orderby']
-		)
-			$orderby = $_GET['orderby'];
-		$this->orderby = $orderby;
+		$this->queryObject = $queryObject;
+
+		return $this;
+	}
+
+	public function getQueryObject()
+	{
+		return $this->queryObject;
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 * @see WP_List_Table::ajax_user_can()
 	 */
 	public function ajax_user_can()
@@ -116,7 +96,6 @@ class ilcTable extends WP_List_Table
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 * @see WP_List_Table::no_items()
 	 */
 	public function no_items()
@@ -146,10 +125,6 @@ class ilcTable extends WP_List_Table
 		return array();
 	}
 
-	/**
-	 * Column Names
-	 * @return array
-	 */
 	public function get_columns()
 	{
 		return array(
@@ -159,11 +134,6 @@ class ilcTable extends WP_List_Table
 		);
 	}
 
-	/**
-	 * Get sortable columns
-	 * @see WP_List_Table::get_sortable_columns()
-	 * @return array
-	 */
 	public function get_sortable_columns()
 	{
 		return array(
@@ -173,71 +143,69 @@ class ilcTable extends WP_List_Table
 		);
 	}
 
-	/**
-	 * Prepare data for display
-	 * Must get defined in extended class here
-	 * @see WP_List_Table::prepare_items()
-	 */
 	public function prepare_items()
 	{
 		$columns  = $this->get_columns();
 		$hidden   = array();
 		$sortable = $this->get_sortable_columns();
 
-        $this->_column_headers = array(
-        	 $columns
-        	,$hidden
-        	,$sortable
-        );
+		$this->_column_headers = array(
+			$columns,
+			$hidden,
+			$sortable
+		);
 
-        // SQL results
-        $posts = ilcInit :: the_sql_results();
+		// SQL results
+		$posts = $this->getQueryObject();
 		empty( $posts ) AND $posts = array();
 
-        # >>>> Pagination
-        // Per Page Data
+		# >>>> Pagination
+		// Per Page Data
 		$per_page     = 5;
-        $current_page = $this->get_pagenum();
-        $total_items  = count( $posts );
-        $this->set_pagination_args( array(
-        	// Calculate the total number of items
-            'total_items' => $total_items,
-            // Determine how many items to show on a page
-            'per_page'    => $per_page,
-            // Calculate the total number of pages
-            'total_pages' => ceil( $total_items / $per_page ),
-        ) );
+		$current_page = $this->get_pagenum();
+		$total_items  = count( $posts );
+		$this->set_pagination_args( array(
+			// Calculate the total number of items
+			'total_items' => $total_items,
+			// Determine how many items to show on a page
+			'per_page'    => $per_page,
+			// Calculate the total number of pages
+			'total_pages' => ceil( $total_items / $per_page ),
+		) );
 
 		// Setup first and last post index/key for current posts array filter.
-        $last_post = $current_page * $per_page;
-        // In case the last page doesn't hold as many objects,
-        // as the other pages hold: set to last element.
-        $last_post > $total_items AND $last_post = $total_items;
-        // count one post up as we'd have null else
-        $first_post = $last_post - $per_page +1;
+		$last_post = $current_page * $per_page;
+		// In case the last page doesn't hold as many objects,
+		// as the other pages hold: set to last element.
+		$last_post > $total_items AND $last_post = $total_items;
+		// count one post up as we'd have null else
+		$first_post = $last_post - $per_page +1;
 
-        // Setup the range of keys/indizes that contain
-        // the posts on the currently displayed page(d).
-        // Flip keys with values as the range outputs the range in the values.
-        $range = array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
+		// Setup the range of keys/indizes that contain
+		// the posts on the currently displayed page(d).
+		// Flip keys with values as the range outputs the range in the values.
+		$range = array_flip( range( $first_post - 1, $last_post - 1, 1 ) );
 
-        // Filter out the posts we're not displaying on the current page.
-        $posts_array = array_intersect_key( $posts, $range );
-        # <<<< Pagination
+		// Filter out the posts we're not displaying on the current page.
+		$data = is_object( $posts )
+			? $posts->getResults()
+			: $posts;
+		$postsArray = array_intersect_key( $posts->getResults(), $range );
+		# <<<< Pagination
 
-        // Prepare the data
-        $permalink = __( 'Edit:', 'ilc' );
-		foreach ( $posts_array as $key => $post )
+		// Prepare the data
+		$permalink = __( 'Edit:', 'ilc' );
+		foreach ( $postsArray as $key => $post )
 		{
 			$link     = get_edit_post_link( $post->ID );
-			// If no title was set: we care about it
-			$no_title = __( 'No title set', 'ilc' );
-			$title    = ! $post->post_title ? "<em>{$no_title}</em>" : $post->post_title;
+			$title  = empty( $post->post_title )
+				? sprintf( "<em>%s</em>", __( 'No title set', 'ilc' ) )
+				: $post->post_title;
 
 			$posts[ $key ]->post_title = "<a title='{$permalink} {$title}' href='{$link}'>{$title}</a>";
 		}
 
-        $this->items = $posts_array;
+		$this->items = $postsArray;
 	}
 
 	/**
@@ -249,7 +217,7 @@ class ilcTable extends WP_List_Table
 	 */
 	public function column_default( $item, $column_name )
 	{
-		return $item->$column_name;
+		return $item->{$column_name};
 	}
 
 
@@ -262,7 +230,7 @@ class ilcTable extends WP_List_Table
 	public  function display_tablenav( $which )
 	{
 		# if ( 'top' == $which )
-			# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+		# wp_nonce_field( 'bulk-' . $this->_args['plural'] );
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 			<!--

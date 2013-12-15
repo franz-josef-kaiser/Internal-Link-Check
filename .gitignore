@@ -1,0 +1,10 @@
+# Usual suspects
+.DSSTORE
+.DS_STORE
+
+# SVN
+.svn/*
+.svn
+
+# Package Managers
+node_modules
